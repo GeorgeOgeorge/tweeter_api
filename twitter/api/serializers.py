@@ -15,6 +15,7 @@ class TwitterUserSerializer(serializers.ModelSerializer):
     
     follows = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
+    tweets = serializers.SerializerMethodField()
 
     class Meta:
         model = TwitterUser
@@ -22,21 +23,29 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'password',
-            'email',
             'bio',
+            'follows',
+            'followers',
+            'tweets',
+            'email',
             'location',
             'website',
             'phone',
             'birth_date',
-            'date_joined',
-            'follows',
-            'followers'
+            'date_joined'
         ]
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'password': {'write_only': True},
+        }
 
     def get_follows(self, obj):
         pass
 
-    def get_followers(self, ojb):
+    def get_followers(self, obj):
+        pass
+
+    def get_tweets(self, obj):
         pass
     
 
