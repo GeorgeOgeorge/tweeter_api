@@ -32,11 +32,17 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             'website',
             'phone',
             'birth_date',
-            'date_joined'
+            'date_joined',
+            'is_superuser'
         ]
         extra_kwargs = {
             'id': {'read_only': True},
             'password': {'write_only': True},
+            'follows': {'read_only': True},
+            'followers':{'read_only': True},
+            'tweets':{'read_only': True},
+            'is_superuser':{'write_only': True},
+            'date_joined': {'read_only': True}
         }
 
     def get_follows(self, obj):
