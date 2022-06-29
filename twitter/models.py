@@ -5,14 +5,13 @@ from django.contrib.auth.models import AbstractUser
 class TwitterUser(AbstractUser):
     #header_photo = models.ImageField()
     #profile_photo = ImageField()
-    bio = models.TextField(max_length=160, default="hey I'm using Twitter", blank=True)
-    location = models.CharField(max_length=100, default="no location of user registered", blank=True)
-    website = models.URLField(blank=True)
-    phone = models.CharField(max_length=14, blank=True)
-    birth_date = models.DateField(blank=True)
+    bio = models.TextField(max_length=160, default="hey I'm using Twitter", blank=True, null=True)
+    location = models.CharField(max_length=100, default="no location of user registered", blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    phone = models.CharField(max_length=14, blank=True, null=True)
+    birth_date = models.DateField(blank=True, null=True)
 
     follows = models.ManyToManyField('self')
-
     followers = models.ManyToManyField('self')
     
 
@@ -30,7 +29,9 @@ class Tweet(models.Model):
     #midea = models.FileField(upload_to='uploads/')
     location = models.CharField(max_length=100, default="no location of tweet registered", blank=True)
     
-    likes = models.ForeignKey(TwitterUser, related_name='tweet_likes', on_delete=models.CASCADE)
+    tweet_op = models.ForeignKey(TwitterUser, related_name='tweet_op', on_delete=models.CASCADE)
+
+    likes = models.ManyToManyField(TwitterUser, related_name='tweet_likes')
     
     retweets = models.ManyToManyField('self')
 
