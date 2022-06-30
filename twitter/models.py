@@ -46,7 +46,7 @@ class Tweet(models.Model):
 
     likes = models.ManyToManyField(TwitterUser, related_name='tweet_likes')
     
-    retweets = models.ManyToManyField('self')
+    retweets = models.ManyToManyField('self', blank=True)
 
     class Meta:
         ordering = ['id']
