@@ -10,8 +10,8 @@ router.register(r'twitterusers', TwitterUserViewSet, basename='twitterusers')
 router.register(r'tweets', TweetViewSet, basename='tweets')
 
 urlpatterns = [
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/refresh_token', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 urlpatterns += router.urls
