@@ -2,15 +2,6 @@ from rest_framework import serializers
 
 from ..models import TwitterUser, Tweet
 
-class TwitterUserSerializerLogin(serializers.ModelSerializer):
-    
-    class Meta:
-        model = TwitterUser
-        fiedls = [
-            'username',
-            'password'
-        ]
-
 class TwitterUserSerializer(serializers.ModelSerializer):
     
     follows = serializers.SerializerMethodField()
@@ -33,7 +24,6 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             'phone',
             'birth_date',
             'date_joined',
-            'is_superuser'
         ]
         extra_kwargs = {
             'id': {'read_only': True},
@@ -41,7 +31,6 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             'follows': {'read_only': True},
             'followers':{'read_only': True},
             'tweets':{'read_only': True},
-            'is_superuser':{'write_only': True},
             'date_joined': {'read_only': True}
         }
 

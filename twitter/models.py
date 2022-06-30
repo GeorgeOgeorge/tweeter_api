@@ -14,7 +14,6 @@ class TwitterUser(AbstractUser):
     follows = models.ManyToManyField('self')
     followers = models.ManyToManyField('self')
     
-
     class Meta:
         ordering = ['id']
         verbose_name = 'twitter_user'
@@ -22,6 +21,20 @@ class TwitterUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def create_user(serializer, user_pass):
+        new_user = TwitterUser(
+            username = serializer.data['username'],
+            bio = serializer.data['bio'],
+            email = serializer.data['email'],
+            location = serializer.data['location'],
+            website = serializer.data['website'],
+            phone = serializer.data['phone'],
+            birth_date = serializer.data['birth_date'],
+            is_superuser = True
+        )
+        new_user.set_password(user_pass)
+        new_user.save()
 
 
 class Tweet(models.Model):
