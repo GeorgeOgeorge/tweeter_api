@@ -21,8 +21,8 @@ class TwitterUserService():
         result = TwitterUser.objects.filter(pk=id)
         return check_result_value(result)
         
-    def find_user_by_username(name):
-        result = TwitterUser.objects.filter(username__in=name)
+    def find_user_by_username(name, user):
+        result = TwitterUser.objects.filter(username__in=name).exclude(id=user.id)
         return check_result_value(result)
 
 
@@ -40,15 +40,15 @@ class TweetService():
             return True
         else: return False
 
-    def list_recent_tweets():
-        return Tweet.objects.all().order_by('-created')[:10]
+    def list_recent_tweets(user):
+        return Tweet.objects.all().order_by('-created').exclude(tweet_op=user.id)[:10]
 
     def find_tweets_by_user_id(user_id):
         result = Tweet.objects.filter(tweet_op=user_id)
         return check_result_value(result)
 
-    def find_users_tweets(request):
-        user_result = TwitterUserService.find_user_by_username(request['users'])
+    def find_users_tweets(request, user):
+        user_result = TwitterUserService.find_user_by_username(request['users'], user)
         if user_result != None:
             user_tweets = []
             for user in user_result:

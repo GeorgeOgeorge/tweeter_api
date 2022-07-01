@@ -41,13 +41,13 @@ class TweetViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path='get_recent_tweets')
     def get_recent_tweetss(self, request):
-        tweets_query = TweetService.list_recent_tweets()
+        tweets_query = TweetService.list_recent_tweets(request.user)
         tweets = TweetSerializer(tweets_query, many=True)
         return Response(tweets.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"], url_path='get_users_tweets')
     def get_users_tweets(self, request):
-        users_tweets = TweetService.find_users_tweets(request.data)
+        users_tweets = TweetService.find_users_tweets(request.data, request.user)
         if users_tweets:
             tweets = TweetSerializer(users_tweets, many=True)
             return Response(tweets.data, status=status.HTTP_200_OK)
@@ -55,9 +55,10 @@ class TweetViewSet(viewsets.ModelViewSet):
         else: Response({"error": "users selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
         
-    @action(detail=True, methods=["post"], url_path='like_tweet')
-    def like_tweet(self, request, pk=None):
-        pass
+    @action(detail=False, methods=["post"], url_path='like_tweet')
+    def like_tweet(self, request):
+        print(request.user)
+        Response({"ok":"ok"}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"], url_path='comment_tweet')
     def comment_tweet(self, request, pk=None):
