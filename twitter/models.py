@@ -41,10 +41,11 @@ class Tweet(models.Model):
     text = models.CharField(max_length=280, blank=False)
     #midea = models.FileField(upload_to='uploads/')
     location = models.CharField(max_length=100, default="no location of tweet registered", blank=True)
+    created = models.DateTimeField(auto_now_add=True)
     
     tweet_op = models.ForeignKey(TwitterUser, related_name='tweet_op', on_delete=models.CASCADE)
 
-    likes = models.ManyToManyField(TwitterUser, related_name='tweet_likes')
+    likes = models.ManyToManyField(TwitterUser, related_name='tweet_likes', blank=True)
     
     retweets = models.ManyToManyField('self', blank=True)
 
