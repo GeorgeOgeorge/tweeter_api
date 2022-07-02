@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-*&$e+al!$_$v4p(^gyep4+8_(rv8sf))a+7k=^r&4-o&hgc2g%
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    
+    'b2-twitter.herokuapp.com',
     'localhost',
     '0.0.0.0', 
     '127.0.0.1',
