@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ..models import TwitterUser, Tweet
+from ..service import TweetService,  TwitterUserService
 
 class TwitterUserSerializer(serializers.ModelSerializer):
     
@@ -41,7 +42,11 @@ class TwitterUserSerializer(serializers.ModelSerializer):
         pass
 
     def get_tweets(self, obj):
-        pass
+        user_tweets = []
+        tweets_results = TweetService.find_tweets_by_user_id(obj.id)
+        for tweet in tweets_results:
+            user_tweets.append(f'http://127.0.0.1:8000/twitter_api/tweets/{tweet.id}/')
+        return user_tweets
     
 
 class TweetSerializer(serializers.ModelSerializer):
@@ -62,10 +67,18 @@ class TweetSerializer(serializers.ModelSerializer):
         ]
 
     def get_tweet_op(self, obj):
-        pass
+        return f'http://127.0.0.1:8000/twitter_api/twitterusers/{obj.tweet_op.id}/'
 
     def get_likes(self, obj):
-        pass
+        tweet_likes = []
+        likes_result = TweetService.find_tweet_likes_by_id(obj.id)
+        for like in likes_result:
+            tweet_likes.append(f'http://127.0.0.1:8000/twitter_api/twitterusers/{like.id}/')
+        return tweet_likes
 
     def get_retweets(self, obj):
-        pass
+        tweet_retweets = []
+        retweets_results = TweetService.find_tweet_retweets_by_id(obj.id)
+        for retweet in retweets_results:
+            tweet_retweets.append(f'http://127.0.0.1:8000/twitter_api/tweets/{retweet.id}/')
+        return tweet_retweets

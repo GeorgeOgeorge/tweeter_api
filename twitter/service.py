@@ -58,6 +58,20 @@ class TweetService():
             return user_tweets
         else: return False
 
+    def find_tweet_likes_by_id(tweet_id):
+        tweets_likes = []
+        likes_result = TwitterUser.objects.filter(tweet_likes__id=tweet_id)
+        for likes in likes_result:
+            tweets_likes.append(likes)
+        return tweets_likes
+
+    def find_tweet_retweets_by_id(tweet_id):
+        tweet_retweets = []
+        retweets_result = Tweet.objects.filter(retweets__id=tweet_id)
+        for retweets in retweets_result:
+            tweet_retweets.append(retweets)
+        return tweet_retweets
+
 
 def check_result_value(result):
     if len(result) != 0: 
