@@ -13,9 +13,8 @@ class TwitterUserViewSet(viewsets.ModelViewSet):
     serializer_class = TwitterUserSerializer
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        TwitterUserService.create_user(serializer, request.data['password'])
+        new_user = TwitterUserService.create_user(request)
+        serializer = self.get_serializer(new_user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
@@ -29,10 +28,9 @@ class TweetViewSet(viewsets.ModelViewSet):
     serializer_class = TweetSerializer
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        was_saved = TweetService.create_tweet(serializer, request.data['tweet_op'])
+        was_saved = TweetService.create_tweet(request)
         if was_saved:
+            serializer = TweetSerializer(was_saved)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         else: 

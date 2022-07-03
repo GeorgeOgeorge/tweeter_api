@@ -3,19 +3,20 @@ from .models import TwitterUser, Tweet
 
 class TwitterUserService():
 
-    def create_user(serializer, user_pass):
+    def create_user(request):
         new_user = TwitterUser(
-            username = serializer.data['username'],
-            bio = serializer.data['bio'],
-            email = serializer.data['email'],
-            location = serializer.data['location'],
-            website = serializer.data['website'],
-            phone = serializer.data['phone'],
-            birth_date = serializer.data['birth_date'],
+            username = request.data['username'],
+            bio = request.data['bio'],
+            email = request.data['email'],
+            location = request.data['location'],
+            website = request.data['website'],
+            phone = request.data['phone'],
+            birth_date = request.data['birth_date'],
             is_superuser = True
         )
-        new_user.set_password(user_pass)
+        new_user.set_password(request.data['password'])
         new_user.save()
+        return new_user
 
     def find_user_by_id(id):
         result = TwitterUser.objects.filter(pk=id)
@@ -28,16 +29,16 @@ class TwitterUserService():
 
 class TweetService():
 
-    def create_tweet(serializer, tweet_op):
-        tweet_op_result = TwitterUserService.find_user_by_id(tweet_op)
+    def create_tweet(request):
+        tweet_op_result = TwitterUserService.find_user_by_id(request.data['tweet_op'])
         if tweet_op_result != None:
             new_tweet = Tweet(
-                text = serializer.data['text'],
-                location = serializer.data['location'],
+                text = request.data['text'],
+                location = request.data['location'],
                 tweet_op = tweet_op_result.get()
             )
             new_tweet.save()
-            return True
+            return new_tweet
         else: return False
 
     def list_recent_tweets(user):
