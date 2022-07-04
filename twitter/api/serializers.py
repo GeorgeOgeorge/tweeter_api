@@ -5,8 +5,6 @@ from ..service import TweetService,  TwitterUserService
 
 class TwitterUserSerializer(serializers.ModelSerializer):
     
-    follows = serializers.SerializerMethodField()
-    followers = serializers.SerializerMethodField()
     tweets = serializers.SerializerMethodField()
 
     class Meta:
