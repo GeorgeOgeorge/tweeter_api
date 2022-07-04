@@ -9,9 +9,6 @@ class TwitterUser(AbstractUser):
     phone = models.CharField(max_length=14, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
 
-    #follows = models.ManyToManyField('self', blank=True)
-    #followers = models.ManyToManyField('self', blank=True)
-    
     class Meta:
         ordering = ['id']
         verbose_name = 'twitter_user'

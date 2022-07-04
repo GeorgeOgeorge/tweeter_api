@@ -30,18 +30,34 @@ class TwitterUserService():
 
 class TweetService():
 
-    def create_tweet(request):
-        tweet_op_result = TwitterUserService.find_user_by_id(request.data['tweet_op'])
-        if tweet_op_result != None:
-            new_tweet = Tweet(
-                text = request.data['text'],
-                location = request.data['location'],
-                tweet_op = tweet_op_result.get()
-            )
-            new_tweet.save()
-            return new_tweet
-        else: return False
+    def create_tweet(request, user):
+        new_tweet = Tweet(
+            text = request.data['text'],
+            location = request.data['location'],
+            tweet_op = user
+        )
+        new_tweet.save()
+        return new_tweet
+        
+    def like_tweet(tweet_id, user):
+        tweet_result = TweetService.find_tweet_by_id(tweet_id)
+        if tweet_result:
+            tweet = tweet_result.get()
+            tweet.likes.add(user)
+            tweet.save()
+            return tweet
+        else: return None
 
+    def comment_tweet(tweet_id, request):
+        tweet_result = TweetService.find_tweet_by_id(tweet_id)   
+        if tweet_result:
+            comment = TweetService.create_tweet(request, request.user)
+            tweet = tweet_result.get()
+            tweet.retweets.add(comment)
+            tweet.save()
+            return tweet
+        else: return None
+    
     def list_recent_tweets(user):
         return Tweet.objects.all().order_by('-created').exclude(tweet_op=user.id)[:10]
 
@@ -77,17 +93,6 @@ class TweetService():
         for retweets in retweets_result:
             tweet_retweets.append(retweets)
         return tweet_retweets
-
-    def like_tweet(tweet_id, user):
-        tweet_result = TweetService.find_tweet_by_id(tweet_id)
-        if tweet_result:
-            tweet = tweet_result.get()
-            user = TwitterUserService.find_user_by_id(user.id).get()
-            tweet.likes.add(user)
-            tweet.save()
-            return tweet
-        else: return None
-
 
 def check_result_value(result):
     if len(result) != 0: 
