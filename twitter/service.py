@@ -1,3 +1,4 @@
+from unittest import result
 from .models import TwitterUser, Tweet
 
 
@@ -44,6 +45,10 @@ class TweetService():
     def list_recent_tweets(user):
         return Tweet.objects.all().order_by('-created').exclude(tweet_op=user.id)[:10]
 
+    def find_tweet_by_id(tweet_id):
+        result = Tweet.objects.filter(pk=tweet_id)
+        return check_result_value(result)
+
     def find_tweets_by_user_id(user_id):
         result = Tweet.objects.filter(tweet_op=user_id)
         return check_result_value(result)
@@ -72,6 +77,16 @@ class TweetService():
         for retweets in retweets_result:
             tweet_retweets.append(retweets)
         return tweet_retweets
+
+    def like_tweet(tweet_id, user):
+        tweet_result = TweetService.find_tweet_by_id(tweet_id)
+        if tweet_result:
+            tweet = tweet_result.get()
+            user = TwitterUserService.find_user_by_id(user.id).get()
+            tweet.likes.add(user)
+            tweet.save()
+            return tweet
+        else: return None
 
 
 def check_result_value(result):

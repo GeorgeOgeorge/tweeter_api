@@ -40,8 +40,8 @@ class TweetViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"], url_path='get_recent_tweets')
     def get_recent_tweetss(self, request):
         tweets_query = TweetService.list_recent_tweets(request.user)
-        tweets = TweetSerializer(tweets_query, many=True)
-        return Response(tweets.data, status=status.HTTP_200_OK)
+        serializer = TweetSerializer(tweets_query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"], url_path='get_users_tweets')
     def get_users_tweets(self, request):
@@ -49,15 +49,19 @@ class TweetViewSet(viewsets.ModelViewSet):
         if users_tweets:
             tweets = TweetSerializer(users_tweets, many=True)
             return Response(tweets.data, status=status.HTTP_200_OK)
-        elif users_tweets == None: Response({"error": "users selected dont have tweets asinged to them"}, status=status.HTTP_204_NO_CONTENT)
-        else: Response({"error": "users selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
+        elif users_tweets == None: return Response({"error": "users selected dont have tweets asinged to them"}, status=status.HTTP_204_NO_CONTENT)
+        else: return Response({"error": "users selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
         
-    @action(detail=False, methods=["post"], url_path='like_tweet')
-    def like_tweet(self, request):
-        print(request.user)
-        Response({"ok":"ok"}, status=status.HTTP_200_OK)
+    @action(detail=True, methods=["post"], url_path='like_tweet')
+    def like_tweet(self, request, pk=None):
+        updated_tweet = TweetService.like_tweet(pk, request.user)
+        if updated_tweet:
+            serializer = TweetSerializer(updated_tweet)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
+        
     @action(detail=True, methods=["post"], url_path='comment_tweet')
     def comment_tweet(self, request, pk=None):
         pass
