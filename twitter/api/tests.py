@@ -1,7 +1,7 @@
 import requests
 
-ACCESS_TOKEN_VALUE = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU2OTY1NjUxLCJpYXQiOjE2NTY5NjM4NDMsImp0aSI6Ijg1ZTIxNjZmZDIzYTQ3NjdiODQ5NGZhYjg0NzI3YmJkIiwidXNlcl9pZCI6Mn0.DfjxVdqXYrk6XiLFfXQw4n2ae7dsdBZ47MO0iolB2hE'
-REFRESH_TOKEN_VALUE = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1Njk3MTA1MSwiaWF0IjoxNjU2OTYzODUxLCJqdGkiOiI4NmRhNGRlNTFmNmU0ZDczODlkYjQzNDgwMzI2NTc3MiIsInVzZXJfaWQiOjJ9.eMCsHAJfTca_bM0Br0-12zI5Ztk9bdzJ__BAxIb49lc'
+ACCESS_TOKEN_VALUE = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU2OTg2NjY4LCJpYXQiOjE2NTY5ODQ4NjgsImp0aSI6IjkyZjljYWFhM2UzMzRlYTI4ZWJkYmI5OTI4ZmJkYTU3IiwidXNlcl9pZCI6Mn0.VDcaldSiVrZ9pcoS1bd6-g5n78h0wFFEgLWzNyHlZAA'
+REFRESH_TOKEN_VALUE = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1Njk5MjA2OCwiaWF0IjoxNjU2OTg0ODY4LCJqdGkiOiI0NDU2OWFlMzJkMGI0MGU5YmVhMDlmNmYyYjExNDAxYyIsInVzZXJfaWQiOjJ9.7L8l1OexL24i-QTLlVDjUKyNZKN5JLa4xqBbOwYvXtg'
 SERVER = 'https://b2-twitter.herokuapp.com/twitter_api'
 
 HEADERS={'Authorization': f'Token {ACCESS_TOKEN_VALUE}'}
@@ -103,16 +103,24 @@ class TestTwitterUser:
         assert result.status_code == 404
         
 
-
-
 class TestTweet:
 
     def test_list_tweets(self):
-        pass
+        result = requests.get(
+            url=f'{SERVER}/tweets/',
+            headers=HEADERS
+        )
+        assert result.status_code == 200
+        assert result.json() != []
 
     def test_list_last_10_tweets(self):
-        pass
-    
+        result = requests.get(
+            url=f'{SERVER}/tweets/get_recent_tweets/',
+            headers=HEADERS
+        )
+        assert result.status_code == 200
+        assert result.json() != []
+        
     def test_like_tweet(self):
         pass
 
