@@ -13,7 +13,7 @@ Na raiz do projeto executar
 `pip install -r requirements.txt`
 
 No fim sua raiz deve ficar similar à essa
-
+```
 |-> .vscode
 |-> conf_djngo
 |-> twitter
@@ -22,3 +22,4 @@ No fim sua raiz deve ficar similar à essa
 |-> manage.py
 |-> Procfile
 |-> requirements.txt
+```
