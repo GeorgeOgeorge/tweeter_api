@@ -1,12 +1,11 @@
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from ..models import Tweet, TwitterUser
-from ..service import TwitterUserService, TweetService
+from twitter.api.serializers import TweetSerializer, TwitterUserSerializer
+from twitter.models import Tweet, TwitterUser
+from twitter.service import TweetService, TwitterUserService
 
-from .serializers import TweetSerializer, TwitterUserSerializer
 
 class TwitterUserViewSet(viewsets.ModelViewSet):
     queryset = TwitterUser.objects.all()
@@ -18,7 +17,7 @@ class TwitterUserViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-      
+
 class TweetViewSet(viewsets.ModelViewSet):
     queryset = Tweet.objects.all()
     serializer_class = TweetSerializer
@@ -29,9 +28,9 @@ class TweetViewSet(viewsets.ModelViewSet):
             serializer = TweetSerializer(was_saved)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        else: 
+        else:
             return Response({"error": "tweeter_user_id does not exist"}, status=status.HTTP_400_BAD_REQUEST)
-        
+
     @action(detail=False, methods=["get"], url_path='get_recent_tweets')
     def get_recent_tweetss(self, request):
         tweets_query = TweetService.list_recent_tweets(request.user)
@@ -46,7 +45,7 @@ class TweetViewSet(viewsets.ModelViewSet):
             return Response(tweets.data, status=status.HTTP_200_OK)
         elif users_tweets == None: return Response({"error": "users selected dont have tweets asinged to them"}, status=status.HTTP_204_NO_CONTENT)
         else: return Response({"error": "users selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
-   
+
     @action(detail=True, methods=["post"], url_path='like_tweet')
     def like_tweet(self, request, pk=None):
         updated_tweet = TweetService.like_tweet(pk, request.user)

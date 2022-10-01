@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import TwitterUser, Tweet
-
+from twitter.models import Tweet, TwitterUser
 
 admin.site.register(TwitterUser)
 admin.site.register(Tweet)

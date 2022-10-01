@@ -1,9 +1,10 @@
 from django.urls import path
-
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
 
-from .views import TwitterUserViewSet, TweetViewSet
+from twitter.api.views import TweetViewSet, TwitterUserViewSet
+
 
 router = DefaultRouter()
 router.register(r'twitterusers', TwitterUserViewSet, basename='twitterusers')

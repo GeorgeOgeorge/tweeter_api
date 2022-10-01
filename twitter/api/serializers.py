@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
-from ..models import TwitterUser, Tweet
-from ..service import TweetService,  TwitterUserService
+from twitter.models import Tweet, TwitterUser
+from twitter.service import TweetService
+
 
 class TwitterUserSerializer(serializers.ModelSerializer):
-    
+
     tweets = serializers.SerializerMethodField()
 
     class Meta:

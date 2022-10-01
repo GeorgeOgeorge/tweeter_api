@@ -39,7 +39,7 @@ class TestTwitterUser:
         )
         assert result.status_code == 200
         assert result.json() != []
-        
+
     def test_find_user(self):
         user_id = 2
         result = requests.get(
@@ -48,7 +48,7 @@ class TestTwitterUser:
         )
         assert result.status_code == 200
         assert result.json()['id'] == user_id
-    
+
     def test_create_user(self):
         username = "hank"
         result = requests.post(
@@ -101,7 +101,7 @@ class TestTwitterUser:
             headers=HEADERS
         )
         assert result.status_code == 404
-        
+
 
 class TestTweet:
 
@@ -120,7 +120,7 @@ class TestTweet:
         )
         assert result.status_code == 200
         assert result.json() != []
-        
+
     def test_like_tweet(self):
         pass
 
@@ -132,7 +132,7 @@ class TestTweet:
 
     def test_filtered_tweets(self):
         pass
-    
+
     def test_update_tweets(self):
         pass
 
