@@ -1,2 +1,5 @@
-venv/
+# extenções de arquivos
 *.pyc
+
+# pastas de arquivos
+venv/
