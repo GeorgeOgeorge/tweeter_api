@@ -45,9 +45,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
 }
 
 
@@ -126,10 +126,10 @@ WSGI_APPLICATION = 'conf_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dfgc6eioli50qk',
-        'USER': 'slgdznohvrqfwg',
-        'PASSWORD': '63915aee0ac03a1e77580195b4046916a684336a3b2a08b957179c4c73ce9206',
-        'HOST': 'ec2-3-223-242-224.compute-1.amazonaws.com',
+        'NAME': 'd2s67lbtgponep',
+        'USER': 'zzbwpsppavjjae',
+        'PASSWORD': '8846d3ea1364a12bb69cd38976d083e3644c3520330ee2e3092aee5d531ba407',
+        'HOST': 'ec2-52-0-142-65.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }

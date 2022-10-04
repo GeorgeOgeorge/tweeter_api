@@ -5,12 +5,14 @@ from rest_framework.response import Response
 from twitter.api.serializers import TweetSerializer, TwitterUserSerializer
 from twitter.models import Tweet, TwitterUser
 from twitter.service import TweetService, TwitterUserService
-
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 class TwitterUserViewSet(viewsets.ModelViewSet):
     queryset = TwitterUser.objects.all()
     serializer_class = TwitterUserSerializer
 
+    @method_decorator(csrf_exempt)
     def create(self, request):
         new_user = TwitterUserService.create_user(request)
         serializer = self.get_serializer(new_user)
