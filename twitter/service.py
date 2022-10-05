@@ -21,7 +21,7 @@ class TwitterUserService():
     def find_user_by_id(id):
         result = TwitterUser.objects.filter(pk=id)
         return check_result_value(result)
-        
+
     def find_user_by_username(name, user):
         result = TwitterUser.objects.filter(username__in=name).exclude(id=user.id)
         return check_result_value(result)
@@ -30,6 +30,7 @@ class TwitterUserService():
 class TweetService():
 
     def create_tweet(request, user):
+        # breakpoint()
         new_tweet = Tweet(
             text = request.data['text'],
             location = request.data['location'],
@@ -37,7 +38,7 @@ class TweetService():
         )
         new_tweet.save()
         return new_tweet
-        
+
     def like_tweet(tweet_id, user):
         tweet_result = TweetService.find_tweet_by_id(tweet_id)
         if tweet_result:
@@ -48,7 +49,7 @@ class TweetService():
         else: return None
 
     def comment_tweet(tweet_id, request):
-        tweet_result = TweetService.find_tweet_by_id(tweet_id)   
+        tweet_result = TweetService.find_tweet_by_id(tweet_id)
         if tweet_result:
             comment = TweetService.create_tweet(request, request.user)
             tweet = tweet_result.get()
@@ -56,7 +57,7 @@ class TweetService():
             tweet.save()
             return tweet
         else: return None
-    
+
     def list_recent_tweets(user):
         return Tweet.objects.all().order_by('-created').exclude(tweet_op=user.id)[:10]
 

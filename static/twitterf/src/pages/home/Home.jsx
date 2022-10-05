@@ -6,11 +6,15 @@ export function Home() {
     const userToken = sessionStorage.getItem('user')
 
     const [posts, setPosts] = useState([])
-    const [post, setPost] = useState()
+    const [post, setPost] = useState("")
 
     useEffect(() => {
+        const headers = {
+            Authorization: `Token ${userToken}`,
+            'content-type': 'application/json',
+        };
         api
-            .getPost()
+            .getPost(headers)
             .then((response) => {
                 setPosts(response)
             }).catch((err) => {
@@ -23,9 +27,10 @@ export function Home() {
     function cadastraPost(event) {
         event.preventDefault()
         const headers = {
-                    Authorization: `Bearer ${userToken}`,
-                    'content-type': 'application/json',
-                };
+            Authorization: `Token ${userToken}`,
+            'content-type': 'application/json',
+        };
+        console.log(post)
         api
             .postPost({text: post, location: 'natal'}, headers)
             .then()

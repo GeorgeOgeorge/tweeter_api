@@ -9,8 +9,8 @@ export function RouteApp() {
         <div>
             <Routes>
                 <Route element={<Cadastro/>} path='/cadastro'/>
-                <Route element={<Login/>} path='/login'/>
-                <Route element={<Home/>} path='/'/>
+                <Route element={<Login/>} path='/'/>
+                <Route element={<Home/>} path='/home'/>
             </Routes>
         </div>
     )

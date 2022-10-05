@@ -19,7 +19,7 @@ export function Login() {
             alert('Senha ou usuario incorretos!')
         } else {
             sessionStorage.setItem('user', logado.access.toString())
-            navigate('/')
+            navigate('/home')
         }
         
     }
