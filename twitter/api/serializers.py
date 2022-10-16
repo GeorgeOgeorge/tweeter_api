@@ -57,7 +57,7 @@ class TweetSerializer(serializers.ModelSerializer):
         ]
 
     def get_tweet_op(self, obj):
-        return f'https://b2-twitter.herokuapp.com/twitter_api/twitterusers/{obj.tweet_op.id}/'
+        return obj.tweet_op.username
 
     def get_likes(self, obj):
         tweet_likes = []
