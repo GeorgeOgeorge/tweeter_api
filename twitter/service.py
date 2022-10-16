@@ -61,7 +61,7 @@ class TweetService():
     def comment_tweet(tweet_id, request):
         tweet_result = TweetService.find_tweet_by_id(tweet_id)
         if tweet_result:
-            user = TwitterUserService.find_user_by_id(request.data.get('user_id'))
+            user = TwitterUserService.find_user_by_id(int(request.data.get('user_id')))
             comment = TweetService.create_tweet(request, user)
             tweet = tweet_result.get()
             tweet.retweets.add(comment)
