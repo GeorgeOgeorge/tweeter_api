@@ -25,7 +25,6 @@ export function Cadastro() {
 
 
     return (
-        <body>
             <div className="container">
                 <div className="row">
                     <div className="col-md-9 col-lg-8 mx-auto">
@@ -68,6 +67,5 @@ export function Cadastro() {
                     </div>
                 </div>
             </div>
-        </body>
     )
 }
