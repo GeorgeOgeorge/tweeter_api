@@ -5,19 +5,25 @@ from rest_framework.response import Response
 from twitter.api.serializers import TweetSerializer, TwitterUserSerializer
 from twitter.models import Tweet, TwitterUser
 from twitter.service import TweetService, TwitterUserService
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
+
 
 class TwitterUserViewSet(viewsets.ModelViewSet):
     queryset = TwitterUser.objects.all()
     serializer_class = TwitterUserSerializer
 
-    @method_decorator(csrf_exempt)
     def create(self, request):
         new_user = TwitterUserService.create_user(request)
         serializer = self.get_serializer(new_user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=False, methods=["post"], url_path='login')
+    def login(self, request):
+        user_id = TwitterUserService.login(request)
+        if user_id:
+            return Response({"user_id": user_id}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "erro no login"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TweetViewSet(viewsets.ModelViewSet):

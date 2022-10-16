@@ -1,3 +1,5 @@
+from django.contrib.auth import authenticate
+
 from twitter.models import Tweet, TwitterUser
 
 
@@ -25,6 +27,14 @@ class TwitterUserService():
     def find_user_by_username(name, user):
         result = TwitterUser.objects.filter(username__in=name).exclude(id=user.id)
         return check_result_value(result)
+
+    def login(request):
+        user = authenticate(
+            username=request.data.get('username'),
+            password=request.data.get('password')
+        )
+
+        return user.id if user else None
 
 
 class TweetService():
