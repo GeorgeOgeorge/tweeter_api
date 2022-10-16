@@ -18,14 +18,14 @@ export function Login() {
         if (!logado) {
             alert('Senha ou usuario incorretos!')
         } else {
-            sessionStorage.setItem('user', logado.access.toString())
+            sessionStorage.setItem('user', logado.user_id.toString())
             navigate('/home')
         }
         
     }
 
     return (
-        <div className="container-fluid ps-md-0">
+        <div className="login-background container-fluid ps-md-0 ">
             <div className="row g-0">
                 <div className="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
                 <div className="col-md-8 col-lg-6">

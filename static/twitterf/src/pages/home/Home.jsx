@@ -4,18 +4,15 @@ import './home.css';
 
 export function Home() {
     const api = useApi()
-    const userToken = sessionStorage.getItem('user')
+    const userId = sessionStorage.getItem('user')
 
     const [posts, setPosts] = useState([])
     const [post, setPost] = useState("")
+    const [refresh, setRefresh] = useState(0)
 
     useEffect(() => {
-        const headers = {
-            Authorization: `Token ${userToken}`,
-            'content-type': 'application/json',
-        };
         api
-            .getPost(headers)
+            .getPost()
             .then((response) => {
                 setPosts(response)
             }).catch((err) => {
@@ -23,24 +20,31 @@ export function Home() {
             })
     }, [post])
 
-
-
     function cadastraPost(event) {
         event.preventDefault()
-        const headers = {
-            Authorization: `Token ${userToken}`,
-            'content-type': 'application/json',
-        };
-        console.log(post)
         api
-            .postPost({ text: post, location: 'natal' }, headers)
+            .postPost({ text: post, location: 'natal', user_id: userId })
             .then()
             .catch((err) => console.error(err))
+
+        setRefresh(refresh + 1)
+        setPost('')
+    }
+
+    function curtePost(e, postId) {
+        event.preventDefault()
+        console.log(postId, userId)
+        api
+            .curtePost(postId, userId)
+            .then((response) => console.log(response))
+            .catch((err) => console.error(err))
+
+        e.target.style.color = 'red'
     }
 
 
     return (
-        <div className="container-fluid">
+        <div className="container-fluid home-background">
             <div className="container">
 
                 <form id="form-post" onSubmit={(e) => cadastraPost(e)}>
@@ -54,21 +58,18 @@ export function Home() {
 
                     </div>
                 </form>
+                <div className="posts">
 
-
-                <div className="row py-5">
-                    <div className="col-lg-7 mx-auto">
-
-                        {posts.map(post => {
-                            return <div key={post.id} className="card shadow mb-4">
-                                <div className="card-body p-5">
-                                    <h4 className="mb-4">Tweet</h4>
-                                    <p>{post.text}</p>
+                    {posts.map(post => {
+                        return <div key={post.id} className="card-post">
+                                    <h5 className="user-post">{post.tweet_op} <span className="arroba-user">@fulano</span></h5>
                                     <small>{post.location}</small>
+                                    <div className="card-body p-5">
+                                        <p>{post.text}</p>
+                                    </div>
+                                    <i onClick={(e) => curtePost(e, post.id)} class="fa-solid fa-heart like-heart" style={{cursor: 'pointer'}}></i>
                                 </div>
-                            </div>
-                        })}
-                    </div>
+                    })}
                 </div>
             </div>
         </div>

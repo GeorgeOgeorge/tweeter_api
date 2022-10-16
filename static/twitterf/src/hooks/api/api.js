@@ -20,7 +20,7 @@ export const useApi = () => ({
     // },
 
     signin: async (username, password) => {
-        const response = await api.post('/login/', {username, password});
+        const response = await api.post('/twitterusers/login/', {username, password});
 
         if (response.data) {
             return response.data;
@@ -38,14 +38,19 @@ export const useApi = () => ({
         const response = await api.post('/logout/');
     },
 
-    getPost: async (heards) => {
-        const response = await api.get('/tweets/', {heards})
+    getPost: async () => {
+        const response = await api.get('/tweets/')
         return response.data
     },
 
-    postPost: async ({text, location}, heards) => {
-        const response = await api.post('/tweets/', {text, location}, {heards})
+    postPost: async ({text, location, user_id} ) => {
+        const response = await api.post('/tweets/', {text, location, user_id})
         return response.data
+    },
+
+    curtePost: async (id, user_id) => {
+        const response = await api.post(`tweets/${id}/like_tweet/`, {user_id: user_id})
+        return response.status
     }
 
 })

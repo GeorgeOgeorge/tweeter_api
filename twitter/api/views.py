@@ -31,7 +31,7 @@ class TweetViewSet(viewsets.ModelViewSet):
     serializer_class = TweetSerializer
 
     def create(self, request):
-        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        user = TwitterUserService.find_user_by_id(int(request.data.get('user_id'))).first()
         was_saved = TweetService.create_tweet(request, user)
         if was_saved:
             serializer = TweetSerializer(was_saved)
