@@ -51,10 +51,15 @@ class TweetService():
 
     def like_tweet(tweet_id, user):
         tweet_result = TweetService.find_tweet_by_id(tweet_id)
+
         if tweet_result:
             tweet = tweet_result.get()
-            tweet.likes.add(user)
-            tweet.save()
+
+            if tweet.likes.contains(user):
+                tweet.likes.remove(user)
+            else:
+                tweet.likes.add(user)
+                tweet.save()
             return tweet
         else: return None
 
