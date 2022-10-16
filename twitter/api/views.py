@@ -31,7 +31,7 @@ class TweetViewSet(viewsets.ModelViewSet):
     serializer_class = TweetSerializer
 
     def create(self, request):
-        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        user = TwitterUserService.find_user_by_id(int(request.data.get('user_id'))).first()
         was_saved = TweetService.create_tweet(request, user)
         if was_saved:
             serializer = TweetSerializer(was_saved)
@@ -42,7 +42,7 @@ class TweetViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["post"], url_path='get_recent_tweets')
     def get_recent_tweetss(self, request):
-        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        user = TwitterUserService.find_user_by_id(int(request.data.get('user_id'))).first()
         tweets_query = TweetService.list_recent_tweets(user)
         if tweets_query:
             serializer = TweetSerializer(tweets_query, many=True)
@@ -52,7 +52,7 @@ class TweetViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["post"], url_path='get_users_tweets')
     def get_users_tweets(self, request):
-        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        user = TwitterUserService.find_user_by_id(int(request.data.get('user_id'))).first()
         users_tweets = TweetService.find_users_tweets(request.data, user)
         if users_tweets:
             tweets = TweetSerializer(users_tweets, many=True)
@@ -62,7 +62,7 @@ class TweetViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path='like_tweet')
     def like_tweet(self, request, pk=None):
-        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        user = TwitterUserService.find_user_by_id(int(request.data.get('user_id'))).first()
         updated_tweet = TweetService.like_tweet(pk, user)
         if updated_tweet:
             serializer = TweetSerializer(updated_tweet)
