@@ -31,7 +31,8 @@ class TweetViewSet(viewsets.ModelViewSet):
     serializer_class = TweetSerializer
 
     def create(self, request):
-        was_saved = TweetService.create_tweet(request, request.user)
+        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        was_saved = TweetService.create_tweet(request, user)
         if was_saved:
             serializer = TweetSerializer(was_saved)
             headers = self.get_success_headers(serializer.data)
@@ -39,15 +40,20 @@ class TweetViewSet(viewsets.ModelViewSet):
         else:
             return Response({"error": "tweeter_user_id does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=["get"], url_path='get_recent_tweets')
+    @action(detail=False, methods=["post"], url_path='get_recent_tweets')
     def get_recent_tweetss(self, request):
-        tweets_query = TweetService.list_recent_tweets(request.user)
-        serializer = TweetSerializer(tweets_query, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        tweets_query = TweetService.list_recent_tweets(user)
+        if tweets_query:
+            serializer = TweetSerializer(tweets_query, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "no tweets found"}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=["post"], url_path='get_users_tweets')
     def get_users_tweets(self, request):
-        users_tweets = TweetService.find_users_tweets(request.data, request.user)
+        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        users_tweets = TweetService.find_users_tweets(request.data, user)
         if users_tweets:
             tweets = TweetSerializer(users_tweets, many=True)
             return Response(tweets.data, status=status.HTTP_200_OK)
@@ -56,7 +62,8 @@ class TweetViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path='like_tweet')
     def like_tweet(self, request, pk=None):
-        updated_tweet = TweetService.like_tweet(pk, request.user)
+        user = TwitterUserService.find_user_by_id(request.data.get('user_id')).first()
+        updated_tweet = TweetService.like_tweet(pk, user)
         if updated_tweet:
             serializer = TweetSerializer(updated_tweet)
             return Response(serializer.data, status=status.HTTP_200_OK)
