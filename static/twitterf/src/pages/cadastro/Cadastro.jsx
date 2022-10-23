@@ -16,7 +16,7 @@ export function Cadastro() {
     async function handleSignUp(event) {
         event.preventDefault()
 
-        const users = await api.getUsers()
+        const users = await api.getUser()
 
         users.forEach(user => {
             if (user.username == username) {
@@ -36,7 +36,7 @@ export function Cadastro() {
     }
 
     function navLogin() {
-        navigate('/login')
+        navigate('/')
     }
 
 
