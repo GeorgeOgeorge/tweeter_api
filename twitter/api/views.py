@@ -27,7 +27,7 @@ class TwitterUserViewSet(viewsets.ModelViewSet):
 
 
 class TweetViewSet(viewsets.ModelViewSet):
-    queryset = Tweet.objects.all()
+    queryset = Tweet.objects.all().order_by('-created')
     serializer_class = TweetSerializer
 
     def create(self, request):
