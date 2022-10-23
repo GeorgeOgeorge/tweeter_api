@@ -7,6 +7,7 @@ export function Cadastro() {
 
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setComfirmPassword] = useState('')
     const [email, setEmail] = useState('')
 
     const api = useApi()
@@ -15,8 +16,23 @@ export function Cadastro() {
     async function handleSignUp(event) {
         event.preventDefault()
 
-        const logado = await api.signup(username, password, email)
-        navigate('/')
+        const users = await api.getUsers()
+
+        users.forEach(user => {
+            if (user.username == username) {
+                console.log(user.username)
+                alert("O nome de usuário já existe!")
+                return null
+            }
+        });
+
+        if (password === confirmPassword) {
+            const logado = await api.signup(username, password, email)
+            navigate('/')
+        } else {
+            alert("Senhas diferentes!")
+        }
+        
     }
 
     function navLogin() {
@@ -52,7 +68,7 @@ export function Cadastro() {
                                     </div>
 
                                     <div className="form-floating mb-3">
-                                        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="floatingPasswordConfirm" placeholder="Confirm Password" />
+                                        <input value={confirmPassword} onChange={(e) => setComfirmPassword(e.target.value)} type="password" className="form-control" id="floatingPasswordConfirm" placeholder="Confirm Password" />
                                         <label htmlFor="floatingPasswordConfirm">Confirm Password</label>
                                     </div>
 
