@@ -70,7 +70,7 @@ class TweetService():
         tweet_result = TweetService.find_tweet_by_id(tweet_id)
         if tweet_result:
             user = TwitterUserService.find_user_by_id(int(request.data.get('user_id')))
-            comment = TweetService.create_tweet(request, user)
+            comment = TweetService.create_tweet(request, user.first())
             tweet = tweet_result.get()
             tweet.retweets.add(comment)
             tweet.save()
