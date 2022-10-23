@@ -7,8 +7,7 @@ export function Home() {
     const userId = sessionStorage.getItem('user')
 
     const [posts, setPosts] = useState([])
-    const [post, setPost] = useState("")
-    const [refresh, setRefresh] = useState(0)
+    const [post, setPost] = useState()
 
     useEffect(() => {
         api
@@ -22,6 +21,10 @@ export function Home() {
 
     function cadastraPost(event) {
         event.preventDefault()
+        const headers = {
+                    Authorization: `Bearer ${userToken}`,
+                    'content-type': 'application/json',
+                };
         api
             .postPost({ text: post, location: 'natal', user_id: userId })
             .then()
