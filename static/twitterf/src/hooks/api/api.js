@@ -51,6 +51,11 @@ export const useApi = () => ({
     curtePost: async (id, user_id) => {
         const response = await api.post(`tweets/${id}/like_tweet/`, {user_id: user_id})
         return response.status
+    },
+
+    getUser: async (name) => {
+        const response = await api.get(`/twitterusers/${name}`)
+        return response.data
     }
 
 })

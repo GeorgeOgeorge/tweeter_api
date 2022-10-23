@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/api/api";
-import './Login.css'
+import './login.css'
 
 export function Login() {
     const api = useApi()
