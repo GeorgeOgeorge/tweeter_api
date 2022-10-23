@@ -25,6 +25,7 @@ export function Cadastro() {
 
 
     return (
+        <div className="container-fluid" style={{backgroundColor: 'black'}}>
             <div className="container">
                 <div className="row">
                     <div className="col-md-9 col-lg-8 mx-auto">
@@ -66,6 +67,7 @@ export function Cadastro() {
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
     )
 }

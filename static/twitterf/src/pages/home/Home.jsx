@@ -48,7 +48,7 @@ export function Home() {
 
     return (
         <div className="container-fluid home-background">
-            <div className="container">
+            <div className="container home-container">
 
                 <form id="form-post" onSubmit={(e) => cadastraPost(e)}>
                     <div className="mb-3">

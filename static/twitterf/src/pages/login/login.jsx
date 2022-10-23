@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/api/api";
-import './login.css'
+import './Login.css'
 
 export function Login() {
     const api = useApi()
@@ -21,7 +21,11 @@ export function Login() {
             sessionStorage.setItem('user', logado.user_id.toString())
             navigate('/home')
         }
-        
+
+    }
+
+    function navigateToRegister() {
+        navigate('/cadastro')
     }
 
     return (
@@ -35,7 +39,7 @@ export function Login() {
                                 <div className="col-md-9 col-lg-8 mx-auto">
                                     <h3 className="login-heading mb-4">Welcome back!</h3>
 
-                                    
+
                                     <form onSubmit={(e) => handloLogin(e)}>
                                         <div className="form-floating mb-3">
                                             <input value={username} onChange={(e) => setUserName(e.target.value)} type="text" className="form-control" id="floatingInput" placeholder="name@example.com"/>
@@ -56,7 +60,7 @@ export function Login() {
                                         <div className="d-grid">
                                             <button className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Sign in</button>
                                             <div className="text-center">
-                                                <a className="small" href="#">Forgot password?</a>
+                                                <a className="small" onClick={navigateToRegister} href="#">Fazer cadastro?</a>
                                             </div>
                                         </div>
 
