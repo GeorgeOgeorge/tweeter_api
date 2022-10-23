@@ -28,6 +28,9 @@ class TwitterUserService():
         result = TwitterUser.objects.filter(username__in=name).exclude(id=user.id)
         return check_result_value(result)
 
+    def username_exists(name):
+        return TwitterUser.objects.filter(username=name).exists()
+
     def login(request):
         user = authenticate(
             username=request.data.get('username'),

@@ -25,6 +25,13 @@ class TwitterUserViewSet(viewsets.ModelViewSet):
         else:
             return Response({"error": "erro no login"}, status=status.HTTP_404_NOT_FOUND)
 
+    @action(detail=False, methods=['POST'], url_path='username_exist')
+    def username_exist(self, request):
+        result = TwitterUserService.username_exists(request.data.get('name'))
+        if result:
+            return Response({"msg": "user exists"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"msg": "user not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class TweetViewSet(viewsets.ModelViewSet):
     queryset = Tweet.objects.all().order_by('-created')
