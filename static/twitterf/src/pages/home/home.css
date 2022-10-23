@@ -5,7 +5,7 @@
 }
 
 .home-container {
-    width: 35vw;
+    width: 100vw;
 }
 
 .home-post {
@@ -66,4 +66,10 @@
 
 .like-heart:hover {
     color: red;
+}
+
+.coluna-1 {
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
 }

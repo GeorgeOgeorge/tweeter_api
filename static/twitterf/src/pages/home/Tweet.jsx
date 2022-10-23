@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useApi } from "../../hooks/api/api";
 import './home.css';
 
-export function Home() {
+export function Tweet() {
     const api = useApi()
     const userId = sessionStorage.getItem('user')
-    const navigate = useNavigate()
+    let idObj = useParams()
+    const id = Number.parseInt(idObj.id)
 
     const [posts, setPosts] = useState([])
     const [post, setPost] = useState()
     const [post_id, setPost_id] = useState()
     const [coment, setComent] = useState()
     const [retweets_t, setRetweets_t] = useState([])
+    const [retweets_t_ids, setRetweets_t_ids] = useState([])
 
     useEffect(() => {
         api
-            .getPost()
+            .getRettweets(id)
             .then((response) => {
                 setPosts(response)
             }).catch((err) => {
@@ -35,8 +37,6 @@ export function Home() {
     }
 
     function curtePost(event, postId) {
-        console.log(post_id)
-
         event.preventDefault()
         api
             .curtePost(postId, userId)
@@ -47,7 +47,6 @@ export function Home() {
     }
 
     function comentaPost(event) {
-        console.log(post_id)
         event.preventDefault()
         api.
             comentPost(post_id, userId, coment, "natal")
@@ -55,10 +54,19 @@ export function Home() {
             .catch((err) => console.error(err))
     }
 
-    function getRettweets(e, id) {
-        e.preventDefault()
-        navigate(`/tweet/${id}`)
-    }
+    useEffect(() => {
+        api
+            .getRettweets(id)
+            .then((response) => { setRetweets_t_ids([response.retweets]); console.log(retweets_t_ids) })
+            .catch((err) => console.error(err))
+
+        // retweets_t_ids.forEach(rt => {
+        //     api.getRettweets(rt)
+        //         .then((response) => { setRetweets_t(retweets_t, response); console.log(retweets_t) })
+        //         .catch((err) => console.error(err))
+        // })
+
+    }, [])
 
 
     return (
@@ -74,28 +82,29 @@ export function Home() {
                     </div>
 
                     <div className="col-4">
-                        <form id="form-post" onSubmit={(e) => cadastraPost(e)}>
-                            <div className="mb-3">
-                                <label htmlFor="exampleFormControlTextarea1" className="form-label home-post">Home</label>
-                                <textarea value={post} onChange={(e) => setPost(e.target.value)}
-                                    className="form-control input-post" id="exampleFormControlTextarea1" rows={5} placeholder="O que há de novo?" />
-                                <div className="buttons">
-                                    <button className="button-post" type="submit">Tweet</button>
-                                </div>
 
-                            </div>
-                        </form>
                         <div className="posts">
 
-                            {posts.map(post => {
-                                return <div key={post.id} className="card-post" onClick={(e) => getRettweets(e, post.id)} style={{ cursor: 'pointer' }}>
-                                    <h5 className="user-post">{post.tweet_op} <span className="arroba-user">@fulano</span></h5>
-                                    <small>{post.location}</small>
+
+                            <div key={posts.id} className="card-post">
+                                <h5 className="user-post">{posts.tweet_op} <span className="arroba-user">@fulano</span></h5>
+                                <small>{posts.location}</small>
+                                <div className="card-body p-5">
+                                    <p>{posts.text}</p>
+                                </div>
+                                <i onClick={(e) => curtePost(e, posts.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                <i onClick={() => setPost_id(posts.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                            </div>
+
+                            {retweets_t.map(rtt => {
+                                <div key={rtt.id} className="card-post">
+                                    <h5 className="user-post">{rtt.tweet_op} <span className="arroba-user">@fulano</span></h5>
+                                    <small>{rtt.location}</small>
                                     <div className="card-body p-5">
-                                        <p>{post.text}</p>
+                                        <p>{rtt.text}</p>
                                     </div>
-                                    <i onClick={(e) => curtePost(e, post.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
-                                    <i onClick={() => setPost_id(post.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                    <i onClick={(e) => curtePost(e, rtt.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                    <i onClick={() => setPost_id(rtt.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
                                 </div>
                             })}
                         </div>

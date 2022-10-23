@@ -53,9 +53,19 @@ export const useApi = () => ({
         return response.status
     },
 
-    getUser: async (name) => {
-        const response = await api.get(`/twitterusers/${name}`)
+    comentPost: async (id, user_id, text, location) => {
+        const response = await api.post(`tweets/${id}/comment_tweet/`, {text: text, location: location, user_id: user_id})
+        return response.status
+    },
+
+    getRettweets: async (id) => {
+        const response = await api.get(`/tweets/${id}/`)
         return response.data
+    },
+
+    getUser: async (name) => {
+        const response = await api.post(`/twitterusers/username_exist/`, {name: name})
+        return response.status
     }
 
 })
