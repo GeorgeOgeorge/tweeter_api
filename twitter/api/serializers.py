@@ -63,13 +63,13 @@ class TweetSerializer(serializers.ModelSerializer):
         tweet_likes = []
         likes_result = TweetService.find_tweet_likes_by_id(obj.id)
         for like in likes_result:
-            tweet_likes.append(f'https://b2-twitter.herokuapp.com/twitter_api/twitterusers/{like.id}/')
+            tweet_likes.append(like.id)
         return tweet_likes
  
     def get_retweets(self, obj):
         tweet_retweets = []
         retweets_results = TweetService.find_tweet_retweets_by_id(obj.id)
         for retweet in retweets_results:
-            tweet_retweets.append(f'https://b2-twitter.herokuapp.com/twitter_api/tweets/{retweet.id}/')
+            tweet_retweets.append(retweet.id)
         return tweet_retweets
 
