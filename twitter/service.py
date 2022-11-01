@@ -88,6 +88,24 @@ class TweetService():
         result = Tweet.objects.filter(tweet_op=user_id)
         return check_result_value(result)
 
+    def get_comments_by_id(tweet_id):
+        return Tweet.objects.raw(f"""
+            select
+                tt.id,
+                tt."text",
+                count(ttl.id)
+            from twitter_tweet tt
+            left join twitter_tweet_likes ttl
+                on ttl.tweet_id = tt.id
+            where tt.id in (
+                select
+                    ttr.to_tweet_id
+                from twitter_tweet_retweets ttr
+                where ttr.from_tweet_id = {tweet_id}
+            )
+            group by tt.id;
+        """)
+
     def find_users_tweets(request, user):
         user_result = TwitterUserService.find_user_by_username(request['users'], user)
         if user_result != None:
