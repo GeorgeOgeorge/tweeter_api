@@ -66,14 +66,19 @@ export function Home() {
             <div className="container-fluid home-container">
                 <div className="row">
                     <div className="col coluna-1">
-                        <h4>Tweetter</h4>
-                        <ol>
-                            <li>Profile</li>
-                            <li>Sair</li>
-                        </ol>
+                        <div className="menu">
+
+                            <ol>
+                                <li><a href=""><i class="fa-brands fa-twitter"></i></a></li>
+                                <li> <a href=""> <i class="fa-solid fa-house"></i> &nbsp;Home</a> </li>
+                                <li><a href=""><i class="fa-solid fa-user"></i> &nbsp;Profile</a></li>
+                                <li><a href=""><i class="fa-solid fa-right-from-bracket"></i> &nbsp;Exit</a></li>
+                            </ol>
+                        </div>
+
                     </div>
 
-                    <div className="col-4">
+                    <div className="col-4" >
                         <form id="form-post" onSubmit={(e) => cadastraPost(e)}>
                             <div className="mb-3">
                                 <label htmlFor="exampleFormControlTextarea1" className="form-label home-post">Home</label>
@@ -120,7 +125,15 @@ export function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className="col"></div>
+                    <div className="col">
+                        <div className="busca">
+                            <input className="search" type="search" name="" id="" placeholder="Busque por alguém" />
+                            <a className="icon-search" href=""><i class="fa-solid fa-magnifying-glass"></i></a>
+                        </div>
+                        <div className="trending">
+                            trendings tops hehehe
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
