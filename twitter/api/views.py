@@ -1,10 +1,25 @@
 from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
 from twitter.api.serializers import TweetSerializer, TwitterUserSerializer
 from twitter.models import Tweet, TwitterUser
 from twitter.service import TweetService, TwitterUserService
+
+
+@api_view(['GET'])
+def get_users_tweets(request, pk):
+    result = TweetService.get_comments_by_id(pk)
+    if result:
+        comments = [
+            {
+                "id": comment.id,
+                "text": comment.text,
+                "likes": comment.count
+            } for comment in result
+        ]
+        return Response(comments, status=status.HTTP_200_OK)
+    else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TwitterUserViewSet(viewsets.ModelViewSet):
@@ -32,6 +47,7 @@ class TwitterUserViewSet(viewsets.ModelViewSet):
             return Response({"msg": "user exists"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"msg": "user not found"}, status=status.HTTP_200_OK)
+
 
 class TweetViewSet(viewsets.ModelViewSet):
     queryset = Tweet.objects.all().order_by('-created')
@@ -74,20 +90,6 @@ class TweetViewSet(viewsets.ModelViewSet):
         if updated_tweet:
             serializer = TweetSerializer(updated_tweet)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=True, methods=["get"], url_path='get_tweet_comment')
-    def comment_tweet(self, request, pk=None):
-        result = TweetService.get_comments_by_id(pk)
-        if result:
-            comments = [
-                {
-                    "id": comment.id,
-                    "text": comment.text,
-                    "likes": comment.count
-                } for comment in result
-            ]
-            return Response(comments, status=status.HTTP_200_OK)
         else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=["post"], url_path='comment_tweets')
