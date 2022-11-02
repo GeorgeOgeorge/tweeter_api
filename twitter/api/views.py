@@ -8,7 +8,7 @@ from twitter.service import TweetService, TwitterUserService
 
 
 @api_view(['GET'])
-def get_users_tweets(request, pk):
+def get_tweet_comments(request, pk):
     result = TweetService.get_comments_by_id(pk)
     if result:
         comments = [
