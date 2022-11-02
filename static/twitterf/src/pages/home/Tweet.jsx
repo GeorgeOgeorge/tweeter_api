@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Menu } from "../../components/menu/Menu";
+import { Search } from "../../components/search/Search";
+import { Trending } from "../../components/Trending/Trending";
 import { useApi } from "../../hooks/api/api";
 import './home.css';
 
@@ -18,7 +21,7 @@ export function Tweet() {
 
     useEffect(() => {
         api
-            .getRettweets(id)
+            .getOnePost(id)
             .then((response) => {
                 setPosts(response)
             }).catch((err) => {
@@ -40,7 +43,7 @@ export function Tweet() {
         event.preventDefault()
         api
             .curtePost(postId, userId)
-            .then((response) => console.log(response))
+            .then((response) => { })
             .catch((err) => console.error(err))
 
         e.target.style.color = 'red'
@@ -50,21 +53,19 @@ export function Tweet() {
         event.preventDefault()
         api.
             comentPost(post_id, userId, coment, "natal")
-            .then((response) => console.log(response))
-            .catch((err) => console.error(err))
+            .then((response) => { })
+            .catch((err) => console.error(err, "asd"))
     }
 
     useEffect(() => {
         api
             .getRettweets(id)
-            .then((response) => { setRetweets_t_ids([response.retweets]); console.log(retweets_t_ids) })
+            .then((response) => {
+                setRetweets_t(response)
+                console.log("ola", response)
+            })
             .catch((err) => console.error(err))
-
-        // retweets_t_ids.forEach(rt => {
-        //     api.getRettweets(rt)
-        //         .then((response) => { setRetweets_t(retweets_t, response); console.log(retweets_t) })
-        //         .catch((err) => console.error(err))
-        // })
+        console.log(retweets_t)
 
     }, [])
 
@@ -74,18 +75,12 @@ export function Tweet() {
             <div className="container-fluid home-container">
                 <div className="row">
                     <div className="col coluna-1">
-                        <h4>Tweetter</h4>
-                        <ol>
-                            <li>Profile</li>
-                            <li>Sair</li>
-                        </ol>
+                        <Menu />
+
                     </div>
 
-                    <div className="col-4">
-
+                    <div className="col-4" >
                         <div className="posts">
-
-
                             <div key={posts.id} className="card-post">
                                 <h5 className="user-post">{posts.tweet_op} <span className="arroba-user">@fulano</span></h5>
                                 <small>{posts.location}</small>
@@ -96,8 +91,8 @@ export function Tweet() {
                                 <i onClick={() => setPost_id(posts.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
                             </div>
 
-                            {retweets_t.map(rtt => {
-                                <div key={rtt.id} className="card-post">
+                            {(retweets_t) ? retweets_t.map(rtt => {
+                                return (<div key={rtt.id} className="card-post">
                                     <h5 className="user-post">{rtt.tweet_op} <span className="arroba-user">@fulano</span></h5>
                                     <small>{rtt.location}</small>
                                     <div className="card-body p-5">
@@ -106,7 +101,8 @@ export function Tweet() {
                                     <i onClick={(e) => curtePost(e, rtt.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
                                     <i onClick={() => setPost_id(rtt.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
                                 </div>
-                            })}
+                                )
+                            }) : <div>sem comentários</div>}
                         </div>
 
                         {/* <!-- Modal --> */}
@@ -129,9 +125,13 @@ export function Tweet() {
                             </div>
                         </div>
                     </div>
-                    <div className="col"></div>
+                    <div className="col">
+                        <Search />
+                        <Trending />
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
+

@@ -1,0 +1,16 @@
+.busca {
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.search {
+    background-color: rgba(56, 55, 55, 0.377);
+    border-radius: 15px;
+    color: aliceblue;
+    padding: 5px;
+    border: 0.3px solid rgba(128, 127, 219, 0.226);
+}
+
+.icon-search {
+    margin-left: 10px;
+}

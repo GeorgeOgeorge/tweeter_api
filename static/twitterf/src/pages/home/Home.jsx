@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Menu } from "../../components/menu/Menu";
+import { Search } from "../../components/search/Search";
+import { Trending } from "../../components/Trending/Trending";
 import { useApi } from "../../hooks/api/api";
 import './home.css';
 
@@ -66,15 +69,7 @@ export function Home() {
             <div className="container-fluid home-container">
                 <div className="row">
                     <div className="col coluna-1">
-                        <div className="menu">
-
-                            <ol>
-                                <li><a href=""><i class="fa-brands fa-twitter"></i></a></li>
-                                <li> <a href=""> <i class="fa-solid fa-house"></i> &nbsp;Home</a> </li>
-                                <li><a href=""><i class="fa-solid fa-user"></i> &nbsp;Profile</a></li>
-                                <li><a href=""><i class="fa-solid fa-right-from-bracket"></i> &nbsp;Exit</a></li>
-                            </ol>
-                        </div>
+                        <Menu />
 
                     </div>
 
@@ -90,11 +85,12 @@ export function Home() {
 
                             </div>
                         </form>
+
                         <div className="posts">
 
                             {posts.map(post => {
-                                return <div key={post.id} className="card-post" onClick={(e) => getRettweets(e, post.id)} style={{ cursor: 'pointer' }}>
-                                    <h5 className="user-post">{post.tweet_op} <span className="arroba-user">@fulano</span></h5>
+                                return <div key={post.id} className="card-post" style={{ cursor: 'pointer' }}>
+                                    <h5 onClick={(e) => getRettweets(e, post.id)} className="user-post">{post.tweet_op} <span className="arroba-user">@fulano</span></h5>
                                     <small>{post.location}</small>
                                     <div className="card-body p-5">
                                         <p>{post.text}</p>
@@ -126,13 +122,8 @@ export function Home() {
                         </div>
                     </div>
                     <div className="col">
-                        <div className="busca">
-                            <input className="search" type="search" name="" id="" placeholder="Busque por alguém" />
-                            <a className="icon-search" href=""><i class="fa-solid fa-magnifying-glass"></i></a>
-                        </div>
-                        <div className="trending">
-                            trendings tops hehehe
-                        </div>
+                        <Search />
+                        <Trending />
                     </div>
                 </div>
             </div>

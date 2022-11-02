@@ -1,0 +1,19 @@
+.menu {
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 300px;
+    margin-top: 20px;
+}
+
+.menu ol, a {
+    list-style-type: none;
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.menu ol li {
+    margin-bottom: 10px;
+    padding: 5px;
+}
