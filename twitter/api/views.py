@@ -76,14 +76,6 @@ class TweetViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=["post"], url_path='comment_tweet')
-    def comment_tweet(self, request, pk=None):
-        updated_tweet = TweetService.comment_tweet(pk, request)
-        if updated_tweet:
-            serializer = TweetSerializer(updated_tweet)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
-
     @action(detail=True, methods=["get"], url_path='get_tweet_comment')
     def comment_tweet(self, request, pk=None):
         result = TweetService.get_comments_by_id(pk)
@@ -98,3 +90,10 @@ class TweetViewSet(viewsets.ModelViewSet):
             return Response(comments, status=status.HTTP_200_OK)
         else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=["post"], url_path='comment_tweets')
+    def comment_tweet(self, request, pk=None):
+        updated_tweet = TweetService.comment_tweet(pk, request)
+        if updated_tweet:
+            serializer = TweetSerializer(updated_tweet)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
