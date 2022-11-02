@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from twitter.models import Tweet, TwitterUser
-from twitter.service import TweetService
+from twitter.service import TweetService, TwitterUserService
 
 
 class TwitterUserSerializer(serializers.ModelSerializer):
@@ -16,6 +16,8 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             'password',
             'bio',
             'tweets',
+            'follows',
+            'followers',
             'email',
             'location',
             'website',
@@ -37,6 +39,24 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             for tweet in tweets_results:
                 user_tweets.append(f'https://b2-twitter.herokuapp.com/twitter_api/tweets/{tweet.id}/')
         return user_tweets
+
+    def get_follows(self, obj):
+        follows = TwitterUserService.find_user_by_id(obj.id).get().follows.all()
+        return [
+            {
+                "id": user.id,
+                "name": user.username
+            } for user in follows
+        ]
+
+    def get_follows(self, obj):
+        followers = TwitterUserService.find_user_by_id(obj.id).get().followers.all()
+        return [
+            {
+                "id": user.id,
+                "name": user.username
+            }
+        for user in followers]
 
 
 class TweetSerializer(serializers.ModelSerializer):
@@ -65,7 +85,7 @@ class TweetSerializer(serializers.ModelSerializer):
         for like in likes_result:
             tweet_likes.append(like.id)
         return tweet_likes
- 
+
     def get_retweets(self, obj):
         tweet_retweets = []
         retweets_results = TweetService.find_tweet_retweets_by_id(obj.id)

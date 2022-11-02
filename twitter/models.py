@@ -8,6 +8,8 @@ class TwitterUser(AbstractUser):
     website = models.URLField(blank=True, null=True)
     phone = models.CharField(max_length=14, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
+    follows = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='twitter_user_follows')
+    followers = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='twitter_user_followers')
 
     class Meta:
         ordering = ['id']
@@ -22,10 +24,9 @@ class Tweet(models.Model):
     text = models.CharField(max_length=280, blank=False)
     location = models.CharField(max_length=100, default="no location of tweet registered", blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    
     tweet_op = models.ForeignKey(TwitterUser, related_name='tweet_op', on_delete=models.CASCADE)
     likes = models.ManyToManyField(TwitterUser, related_name='tweet_likes', blank=True)
-    retweets = models.ManyToManyField('self', blank=True)
+    retweets = models.ManyToManyField('self', blank=True, symmetrical=False)
 
     class Meta:
         ordering = ['id']

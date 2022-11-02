@@ -7,6 +7,15 @@ from twitter.models import Tweet, TwitterUser
 from twitter.service import TweetService, TwitterUserService
 
 
+@api_view(['POST'])
+def follow_user(request, user_pk, follow_pk):
+    breakpoint()
+    user = TwitterUserService.follow_user(user_pk, follow_pk)
+    if user:
+         return Response(TwitterUserSerializer(user).data, status=status.HTTP_200_OK)
+    return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 def get_user_tweets(request, pk):
     tweets = TweetService.find_tweets_by_user_id(pk)

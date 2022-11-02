@@ -36,8 +36,23 @@ class TwitterUserService():
             username=request.data.get('username'),
             password=request.data.get('password')
         )
-
         return user.id if user else None
+
+    def follow_user(user_pk, follow_pk):
+        user = TwitterUserService.find_user_by_id(user_pk).first()
+        target = TwitterUserService.find_user_by_id(follow_pk).first()
+
+        if user and target:
+            if not user.follows.contains(target) and not target.followers.contains(user):
+                user.follows.add(target)
+                target.followers.add(user)
+            else:
+                user.follows.remove(target)
+                target.followers.remove(user)
+            user.save()
+            target.save()
+            return user
+        return None
 
 
 class TweetService():
