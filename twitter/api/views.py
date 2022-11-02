@@ -9,7 +9,6 @@ from twitter.service import TweetService, TwitterUserService
 
 @api_view(['POST'])
 def follow_user(request, user_pk, follow_pk):
-    breakpoint()
     user = TwitterUserService.follow_user(user_pk, follow_pk)
     if user:
          return Response(TwitterUserSerializer(user).data, status=status.HTTP_200_OK)
