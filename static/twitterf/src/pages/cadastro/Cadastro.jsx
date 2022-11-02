@@ -16,23 +16,22 @@ export function Cadastro() {
     async function handleSignUp(event) {
         event.preventDefault()
 
-        const users = await api.getUser()
-
-        users.forEach(user => {
-            if (user.username == username) {
-                console.log(user.username)
-                alert("O nome de usuário já existe!")
-                return null
+        const userExists = await api.getUser()
+        console.log(userExists)
+        if (userExists === 200) {
+            if (password === confirmPassword) {
+                const logado = await api.signup(username, password, email)
+                navigate('/')
+            } else {
+                alert("Senhas diferentes!")
             }
-        });
-
-        if (password === confirmPassword) {
-            const logado = await api.signup(username, password, email)
-            navigate('/')
         } else {
-            alert("Senhas diferentes!")
+            alert("Usuário ja existe")
+            return null
         }
-        
+
+
+
     }
 
     function navLogin() {
@@ -41,7 +40,7 @@ export function Cadastro() {
 
 
     return (
-        <div className="container-fluid" style={{backgroundColor: 'black'}}>
+        <div className="container-fluid" style={{ backgroundColor: 'black' }}>
             <div className="container">
                 <div className="row">
                     <div className="col-md-9 col-lg-8 mx-auto">
@@ -84,6 +83,6 @@ export function Cadastro() {
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
     )
 }

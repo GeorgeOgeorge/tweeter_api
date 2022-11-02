@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Menu } from "../../components/menu/Menu";
 import { Search } from "../../components/search/Search";
 import { Trending } from "../../components/Trending/Trending";
 import { useApi } from "../../hooks/api/api";
 import './home.css';
 
-export function Home() {
+export function Tweet() {
     const api = useApi()
     const userId = sessionStorage.getItem('user')
-    const navigate = useNavigate()
+    let idObj = useParams()
+    const id = Number.parseInt(idObj.id)
 
     const [posts, setPosts] = useState([])
     const [post, setPost] = useState()
     const [post_id, setPost_id] = useState()
     const [coment, setComent] = useState()
     const [retweets_t, setRetweets_t] = useState([])
+    const [retweets_t_ids, setRetweets_t_ids] = useState([])
 
     useEffect(() => {
         api
-            .getPost()
+            .getOnePost(id)
             .then((response) => {
                 setPosts(response)
             }).catch((err) => {
@@ -38,30 +40,34 @@ export function Home() {
     }
 
     function curtePost(event, postId) {
-        console.log(post_id)
-
         event.preventDefault()
         api
             .curtePost(postId, userId)
-            .then((response) => console.log(response))
+            .then((response) => { })
             .catch((err) => console.error(err))
 
         e.target.style.color = 'red'
     }
 
     function comentaPost(event) {
-        console.log(post_id)
         event.preventDefault()
         api.
             comentPost(post_id, userId, coment, "natal")
-            .then((response) => console.log(response))
-            .catch((err) => console.error(err))
+            .then((response) => { })
+            .catch((err) => console.error(err, "asd"))
     }
 
-    function getRettweets(e, id) {
-        e.preventDefault()
-        navigate(`/tweet/${id}`)
-    }
+    useEffect(() => {
+        api
+            .getRettweets(id)
+            .then((response) => {
+                setRetweets_t(response)
+                console.log("ola", response)
+            })
+            .catch((err) => console.error(err))
+        console.log(retweets_t)
+
+    }, [])
 
 
     return (
@@ -74,31 +80,29 @@ export function Home() {
                     </div>
 
                     <div className="col-4" >
-                        <form id="form-post" onSubmit={(e) => cadastraPost(e)}>
-                            <div className="mb-3">
-                                <label htmlFor="exampleFormControlTextarea1" className="form-label home-post">Home</label>
-                                <textarea value={post} onChange={(e) => setPost(e.target.value)}
-                                    className="form-control input-post" id="exampleFormControlTextarea1" rows={5} placeholder="O que há de novo?" />
-                                <div className="buttons">
-                                    <button className="button-post" type="submit">Tweet</button>
-                                </div>
-
-                            </div>
-                        </form>
-
                         <div className="posts">
-
-                            {posts.map(post => {
-                                return <div key={post.id} className="card-post" style={{ cursor: 'pointer' }}>
-                                    <h5 onClick={(e) => getRettweets(e, post.id)} className="user-post">{post.tweet_op} <span className="arroba-user">@fulano</span></h5>
-                                    <small>{post.location}</small>
-                                    <div className="card-body p-5">
-                                        <p>{post.text}</p>
-                                    </div>
-                                    <i onClick={(e) => curtePost(e, post.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
-                                    <i onClick={() => setPost_id(post.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                            <div key={posts.id} className="card-post">
+                                <h5 className="user-post">{posts.tweet_op} <span className="arroba-user">@fulano</span></h5>
+                                <small>{posts.location}</small>
+                                <div className="card-body p-5">
+                                    <p>{posts.text}</p>
                                 </div>
-                            })}
+                                <i onClick={(e) => curtePost(e, posts.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                <i onClick={() => setPost_id(posts.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                            </div>
+
+                            {(retweets_t) ? retweets_t.map(rtt => {
+                                return (<div key={rtt.id} className="card-post">
+                                    <h5 className="user-post">{rtt.tweet_op} <span className="arroba-user">@fulano</span></h5>
+                                    <small>{rtt.location}</small>
+                                    <div className="card-body p-5">
+                                        <p>{rtt.text}</p>
+                                    </div>
+                                    <i onClick={(e) => curtePost(e, rtt.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                    <i onClick={() => setPost_id(rtt.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                </div>
+                                )
+                            }) : <div>sem comentários</div>}
                         </div>
 
                         {/* <!-- Modal --> */}
@@ -130,3 +134,4 @@ export function Home() {
         </div>
     )
 }
+
