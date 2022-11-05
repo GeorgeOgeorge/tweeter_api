@@ -41,6 +41,14 @@ class TwitterUserViewSet(viewsets.ModelViewSet):
         else:
             return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['POST'])
+    def block_user(self, request):
+        user = TwitterUserService.block_user(request.data.get("user_pk"), request.data.get("follow_pk"))
+        if user:
+            return Response(TwitterUserSerializer(user).data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class TweetViewSet(viewsets.ModelViewSet):
     queryset = Tweet.objects.all().order_by('-created')

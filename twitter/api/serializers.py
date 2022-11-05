@@ -9,6 +9,7 @@ class TwitterUserSerializer(serializers.ModelSerializer):
     tweets = serializers.SerializerMethodField()
     follows = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
+    blocks = serializers.SerializerMethodField()
 
     class Meta:
         model = TwitterUser
@@ -26,6 +27,7 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             'phone',
             'birth_date',
             'date_joined',
+            'blocks'
         ]
         extra_kwargs = {
             'id': {'read_only': True},
@@ -56,6 +58,15 @@ class TwitterUserSerializer(serializers.ModelSerializer):
                 "id": user.id,
                 "name": user.username
             } for user in followers
+        ]
+
+    def get_blocks(self, obj):
+        blocks = TwitterUserService.find_user_by_id(obj.id).get().blocks.all()
+        return [
+            {
+                "id": user.id,
+                "name": user.username
+            } for user in blocks
         ]
 
 

@@ -10,6 +10,7 @@ class TwitterUser(AbstractUser):
     birth_date = models.DateField(blank=True, null=True)
     follows = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='twitter_user_follows')
     followers = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='twitter_user_followers')
+    blocks = models.ManyToManyField('self', blank=True, symmetrical=True)
 
     class Meta:
         ordering = ['id']

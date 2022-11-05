@@ -54,6 +54,18 @@ class TwitterUserService():
             return user
         return None
 
+    def block_user(user_pk, follow_pk):
+        user = TwitterUserService.find_user_by_id(user_pk).first()
+        target = TwitterUserService.find_user_by_id(follow_pk).first()
+
+        if user and target:
+            if not user.blocks.contains(target):
+                user.blocks.add(target)
+            else:
+                user.blocks.remove(target)
+            user.save()
+            return user
+        return None
 
 class TweetService():
 
