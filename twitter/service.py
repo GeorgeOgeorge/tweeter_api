@@ -104,22 +104,17 @@ class TweetService():
         return check_result_value(result)
 
     def get_comments_by_id(tweet_id):
-        return Tweet.objects.raw(f"""
-            select
-                tt.id,
-                tt."text",
-                count(ttl.id)
-            from twitter_tweet tt
-            left join twitter_tweet_likes ttl
-                on ttl.tweet_id = tt.id
-            where tt.id in (
-                select
-                    ttr.to_tweet_id
-                from twitter_tweet_retweets ttr
-                where ttr.from_tweet_id = {tweet_id}
-            )
-            group by tt.id;
-        """)
+        breakpoint()
+        x = Tweet.objects.filter(pk=tweet_id).get()
+        return [
+            {
+                "id": comment.id,
+                "text": comment.text,
+                "likes": comment.likes.count(),
+                "op_id": comment.tweet_op.id,
+                "op_name": comment.tweet_op.name
+            } for comment in x.retweets
+        ]
 
     def find_users_tweets(request, user):
         user_result = TwitterUserService.find_user_by_username(request['users'], user)
@@ -128,7 +123,7 @@ class TweetService():
             for user in user_result:
                 tweet_result = TweetService.find_tweets_by_user_id(user.id)
                 if tweet_result != None:
-                    for tweet in tweet_result: user_tweets.append(tweet) 
+                    for tweet in tweet_result: user_tweets.append(tweet)
             return user_tweets
         else: return False
 
@@ -146,8 +141,30 @@ class TweetService():
             tweet_retweets.append(retweets)
         return tweet_retweets
 
+    def get_home_tweets(user_id):
+        user = TwitterUserService.find_user_by_id(user_id).get()
+        breakpoint()
+        if user.follows.exists():
+            return [
+                {
+                    "id": tweet.id,
+                    "text": tweet.text,
+                    "tweet_op": tweet.tweet_op.username,
+                    "comments": [
+                        {
+                            "id": comment.id,
+                            "text": comment.text,
+                            "likes": comment.count
+                        } for comment in TweetService.get_comments_by_id(tweet.id)
+                    ]
+                }
+                for tweet in [TweetService.find_tweets_by_user_id(follow.id) for follow in user.follows]
+            ]
+        return Tweet.objects.all().order_by('-created')
+
+
 def check_result_value(result):
-    if len(result) != 0: 
+    if len(result) != 0:
         return result
-    else: 
+    else:
         return None

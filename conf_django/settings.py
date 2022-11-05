@@ -10,12 +10,9 @@ SECRET_KEY = 'django-insecure-*&$e+al!$_$v4p(^gyep4+8_(rv8sf))a+7k=^r&4-o&hgc2g%
 
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'b2-twitter.herokuapp.com',
-    'localhost',
-    '0.0.0.0',
-    '127.0.0.1',
-]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 
     'twitter',
 
@@ -44,42 +42,7 @@ REST_FRAMEWORK = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
-
-
 AUTH_USER_MODEL = 'twitter.TwitterUser'
-
-
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=59),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(hours=2),
-#     'ROTATE_REFRESH_TOKENS': True,
-#     'BLACKLIST_AFTER_ROTATION': True,
-#     'UPDATE_LAST_LOGIN': False,
-
-#     'ALGORITHM': 'HS256',
-#     'VERIFYING_KEY': None,
-#     'AUDIENCE': None,
-#     'ISSUER': None,
-#     'JWK_URL': None,
-#     'LEEWAY': 0,
-
-#     'AUTH_HEADER_TYPES': ('Token',),
-#     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-#     'USER_ID_FIELD': 'id',
-#     'USER_ID_CLAIM': 'user_id',
-#     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
-
-#     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-#     'TOKEN_TYPE_CLAIM': 'token_type',
-#     'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
-
-#     'JTI_CLAIM': 'jti',
-
-#     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-#     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=50),
-#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-# }
 
 
 MIDDLEWARE = [

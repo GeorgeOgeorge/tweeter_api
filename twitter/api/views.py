@@ -6,52 +6,58 @@ from twitter.api.serializers import TweetSerializer, TwitterUserSerializer
 from twitter.models import Tweet, TwitterUser
 from twitter.service import TweetService, TwitterUserService
 
+# @api_view(['GET'])
+# def user_home(request, user_pk):
+#     user = TweetService.get_home_tweets(user_pk)
+#     if user:
+#          return Response(TwitterUserSerializer(user).data, status=status.HTTP_200_OK)
+#     return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def follow_user(request, user_pk, follow_pk):
-    user = TwitterUserService.follow_user(user_pk, follow_pk)
-    if user:
-         return Response(TwitterUserSerializer(user).data, status=status.HTTP_200_OK)
-    return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-def get_user_tweets(request, pk):
-    tweets = TweetService.find_tweets_by_user_id(pk)
-
-    if tweets:
-        result_tweets = [
-            {
-                "id": tweet.id,
-                "text": tweet.text,
-                "likes": tweet.likes.count(),
-                "comments": [
-                    {
-                        "id": comment.id,
-                        "text": comment.text,
-                        "likes": comment.count
-                    } for comment in TweetService.get_comments_by_id(tweet.id)
-                ] if tweet.retweets.exists() else []
-            }
-        for tweet in tweets]
-        return Response({"user_id": pk, "tweets": result_tweets}, status=status.HTTP_200_OK)
-
-    return Response({"error": "user has no tweets"}, status=status.HTTP_400_BAD_REQUEST)
+# @api_view(['POST'])
+# def follow_user(request, user_pk, follow_pk):
+#     user = TwitterUserService.follow_user(user_pk, follow_pk)
+#     if user:
+#          return Response(TwitterUserSerializer(user).data, status=status.HTTP_200_OK)
+#     return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
-def get_tweet_comments(request, pk):
-    result = TweetService.get_comments_by_id(pk)
-    if result:
-        comments = [
-            {
-                "id": comment.id,
-                "text": comment.text,
-                "likes": comment.count
-            } for comment in result
-        ]
-        return Response(comments, status=status.HTTP_200_OK)
-    return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
+# @api_view(['GET'])
+# def get_user_tweets(request, pk):
+#     tweets = TweetService.find_tweets_by_user_id(pk)
+
+#     if tweets:
+#         result_tweets = [
+#             {
+#                 "id": tweet.id,
+#                 "text": tweet.text,
+#                 "likes": tweet.likes.count(),
+#                 "comments": [
+#                     {
+#                         "id": comment.id,
+#                         "text": comment.text,
+#                         "likes": comment.count
+#                     } for comment in TweetService.get_comments_by_id(tweet.id)
+#                 ] if tweet.retweets.exists() else []
+#             }
+#         for tweet in tweets]
+#         return Response({"user_id": pk, "tweets": result_tweets}, status=status.HTTP_200_OK)
+
+#     return Response({"error": "user has no tweets"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['GET'])
+# def get_tweet_comments(request, pk):
+#     result = TweetService.get_comments_by_id(pk)
+#     if result:
+#         comments = [
+#             {
+#                 "id": comment.id,
+#                 "text": comment.text,
+#                 "likes": comment.count
+#             } for comment in result
+#         ]
+#         return Response(comments, status=status.HTTP_200_OK)
+#     return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TwitterUserViewSet(viewsets.ModelViewSet):
@@ -131,3 +137,28 @@ class TweetViewSet(viewsets.ModelViewSet):
             serializer = TweetSerializer(updated_tweet)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["get"])
+    def get_tweet_comments(self, request, pk=None):
+        tweet = TweetService.find_tweet_by_id(pk).get()
+        if tweet:
+            result_tweets = {
+                "id": tweet.id,
+                "text": tweet.text,
+                "op_id": tweet.tweet_op.id,
+                "op_name": tweet.tweet_op.username,
+                "likes": tweet.likes.count(),
+                "comments": [
+                    {
+                        "id": comment.id,
+                        "text": comment.text,
+                        "likes": comment.likes.count(),
+                        "op_id": comment.tweet_op.id,
+                        "op_name": comment.tweet_op.username
+                    } for comment in tweet.retweets.all()
+                ]
+            }
+
+            return Response(result_tweets, status=status.HTTP_200_OK)
+
+        return Response({"error": "user has no tweets"}, status=status.HTTP_400_BAD_REQUEST)

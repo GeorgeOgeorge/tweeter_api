@@ -7,6 +7,8 @@ from twitter.service import TweetService, TwitterUserService
 class TwitterUserSerializer(serializers.ModelSerializer):
 
     tweets = serializers.SerializerMethodField()
+    follows = serializers.SerializerMethodField()
+    followers = serializers.SerializerMethodField()
 
     class Meta:
         model = TwitterUser
@@ -49,14 +51,14 @@ class TwitterUserSerializer(serializers.ModelSerializer):
             } for user in follows
         ]
 
-    def get_follows(self, obj):
+    def get_followers(self, obj):
         followers = TwitterUserService.find_user_by_id(obj.id).get().followers.all()
         return [
             {
                 "id": user.id,
                 "name": user.username
-            }
-        for user in followers]
+            } for user in followers
+        ]
 
 
 class TweetSerializer(serializers.ModelSerializer):
