@@ -38,7 +38,8 @@ class TwitterUserViewSet(viewsets.ModelViewSet):
         user = TwitterUserService.follow_user(request.data.get("user_pk"), request.data.get("follow_pk"))
         if user:
             return Response(TwitterUserSerializer(user).data, status=status.HTTP_200_OK)
-        return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "erro during follow process"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TweetViewSet(viewsets.ModelViewSet):
@@ -101,21 +102,21 @@ class TweetViewSet(viewsets.ModelViewSet):
         tweet = TweetService.find_tweet_by_id(pk).get()
         if tweet:
             return Response(TweetSerializer(tweet).data, status=status.HTTP_200_OK)
-        return Response({"error": "tweet has no replies"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "tweet has no replies"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=["get"])
     def get_user_tweets(self, request, pk):
         tweets = TweetService.find_tweets_by_user_id(pk)
         if tweets:
-            result = [TweetSerializer(tweet).data for tweet in tweets]
-            return Response(result, status=status.HTTP_200_OK)
-
-        return Response({"error": "user has no tweets"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response([TweetSerializer(tweet).data for tweet in tweets], status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "user has no tweets"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=["get"])
     def user_home(self, request, pk):
         tweets = TweetService.get_home_tweets(pk)
         if tweets:
-            result = [TweetSerializer(tweet).data for tweet in tweets]
-            return Response(result, status=status.HTTP_200_OK)
-        return Response({"error": "erro while getting tweets"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response([TweetSerializer(tweet).data for tweet in tweets], status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "erro while getting tweets"}, status=status.HTTP_400_BAD_REQUEST)
