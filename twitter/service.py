@@ -93,11 +93,10 @@ class TweetService():
         else: return None
 
     def comment_tweet(tweet_id, request):
-        tweet_result = TweetService.find_tweet_by_id(tweet_id)
-        if tweet_result:
-            user = TwitterUserService.find_user_by_id(int(request.data.get('user_id')))
-            comment = TweetService.create_tweet(request, user.first())
-            tweet = tweet_result.get()
+        tweet = TweetService.find_tweet_by_id(tweet_id).get()
+        user = TwitterUserService.find_user_by_id(int(request.data.get('user_id'))).get()
+        if tweet and user and not tweet.tweet_op.blocks.contains(user):
+            comment = TweetService.create_tweet(request, user)
             tweet.retweets.add(comment)
             tweet.save()
             return tweet
@@ -143,7 +142,7 @@ class TweetService():
         user = TwitterUserService.find_user_by_id(user_id).get()
         if user.follows.exists():
             tweets = []
-            for follow in user.follows.all():
+            for follow in user.follows.exclude(id__in=[block.id for block in user.blocks.all()]):
                 for tweet in TweetService.find_tweets_by_user_id(follow.id): tweets.append(tweet)
             return tweets
         else: return Tweet.objects.all().order_by('-created')

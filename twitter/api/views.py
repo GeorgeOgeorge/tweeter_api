@@ -99,7 +99,7 @@ class TweetViewSet(viewsets.ModelViewSet):
         if updated_tweet:
             serializer = TweetSerializer(updated_tweet)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else: return Response({"error": "tweet selected dont exist"}, status=status.HTTP_400_BAD_REQUEST)
+        else: return Response({"error": "youre blocked"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=["get"])
     def get_tweet_comments(self, request, pk=None):
