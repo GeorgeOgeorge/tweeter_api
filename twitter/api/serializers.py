@@ -35,12 +35,10 @@ class TwitterUserSerializer(serializers.ModelSerializer):
         }
 
     def get_tweets(self, obj):
-        user_tweets = []
-        tweets_results = TweetService.find_tweets_by_user_id(obj.id)
-        if tweets_results:
-            for tweet in tweets_results:
-                user_tweets.append(f'https://b2-twitter.herokuapp.com/twitter_api/tweets/{tweet.id}/')
-        return user_tweets
+        return [
+            TweetSerializer(tweet).data
+            for tweet in TweetService.find_tweets_by_user_id(obj.id)
+        ]
 
     def get_follows(self, obj):
         follows = TwitterUserService.find_user_by_id(obj.id).get().follows.all()
@@ -79,19 +77,26 @@ class TweetSerializer(serializers.ModelSerializer):
         ]
 
     def get_tweet_op(self, obj):
-        return obj.tweet_op.username
+        return {
+            "id": obj.tweet_op.id,
+            "username": obj.tweet_op.username
+        }
 
     def get_likes(self, obj):
-        tweet_likes = []
-        likes_result = TweetService.find_tweet_likes_by_id(obj.id)
-        for like in likes_result:
-            tweet_likes.append(like.id)
-        return tweet_likes
+        return [
+            {
+                "id": user.id,
+                "username": user.username
+            } for user in obj.likes.all()
+        ]
 
     def get_retweets(self, obj):
-        tweet_retweets = []
-        retweets_results = TweetService.find_tweet_retweets_by_id(obj.id)
-        for retweet in retweets_results:
-            tweet_retweets.append(retweet.id)
-        return tweet_retweets
-
+        return [
+            {
+                "id": comment.id,
+                "text": comment.text,
+                "likes": comment.likes.count(),
+                "op_id": comment.tweet_op.id,
+                "op_name": comment.tweet_op.username
+            } for comment in obj.retweets.all()
+        ]

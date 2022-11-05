@@ -58,7 +58,6 @@ class TwitterUserService():
 class TweetService():
 
     def create_tweet(request, user):
-        # breakpoint()
         new_tweet = Tweet(
             text = request.data['text'],
             location = request.data['location'],
@@ -103,19 +102,6 @@ class TweetService():
         result = Tweet.objects.filter(tweet_op=user_id)
         return check_result_value(result)
 
-    def get_comments_by_id(tweet_id):
-        breakpoint()
-        x = Tweet.objects.filter(pk=tweet_id).get()
-        return [
-            {
-                "id": comment.id,
-                "text": comment.text,
-                "likes": comment.likes.count(),
-                "op_id": comment.tweet_op.id,
-                "op_name": comment.tweet_op.name
-            } for comment in x.retweets
-        ]
-
     def find_users_tweets(request, user):
         user_result = TwitterUserService.find_user_by_username(request['users'], user)
         if user_result != None:
@@ -143,24 +129,12 @@ class TweetService():
 
     def get_home_tweets(user_id):
         user = TwitterUserService.find_user_by_id(user_id).get()
-        breakpoint()
         if user.follows.exists():
-            return [
-                {
-                    "id": tweet.id,
-                    "text": tweet.text,
-                    "tweet_op": tweet.tweet_op.username,
-                    "comments": [
-                        {
-                            "id": comment.id,
-                            "text": comment.text,
-                            "likes": comment.count
-                        } for comment in TweetService.get_comments_by_id(tweet.id)
-                    ]
-                }
-                for tweet in [TweetService.find_tweets_by_user_id(follow.id) for follow in user.follows]
-            ]
-        return Tweet.objects.all().order_by('-created')
+            tweets = []
+            for follow in user.follows.all():
+                for tweet in TweetService.find_tweets_by_user_id(follow.id): tweets.append(tweet)
+            return tweets
+        else: return Tweet.objects.all().order_by('-created')
 
 
 def check_result_value(result):
