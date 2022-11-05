@@ -10,12 +10,9 @@ SECRET_KEY = 'django-insecure-*&$e+al!$_$v4p(^gyep4+8_(rv8sf))a+7k=^r&4-o&hgc2g%
 
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'b2-twitter.herokuapp.com',
-    'localhost',
-    '0.0.0.0',
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,7 +41,13 @@ REST_FRAMEWORK = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+# ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = False
+# CORS_ALLOWED_ORIGINS = [
+#     'http://127.0.0.1:5173/',
+# ]
 
 
 AUTH_USER_MODEL = 'twitter.TwitterUser'

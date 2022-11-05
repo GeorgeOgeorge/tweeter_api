@@ -68,9 +68,13 @@ export const useApi = () => ({
         return response.data
     },
 
-    getUser: async (name) => {
+    getUserAlreadyExist: async (name) => {
         const response = await api.post(`/twitterusers/username_exist/`, { name: name })
         return response.status
-    }
+    },
 
+    getUser: async (id) => {
+        const response = await api.get(`/twitterusers/${id}/`)
+        return response.data
+    }
 })
