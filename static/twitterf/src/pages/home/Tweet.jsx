@@ -17,7 +17,6 @@ export function Tweet() {
     const [post_id, setPost_id] = useState()
     const [coment, setComent] = useState()
     const [retweets_t, setRetweets_t] = useState([])
-    const [retweets_t_ids, setRetweets_t_ids] = useState([])
 
     useEffect(() => {
         api
@@ -61,11 +60,10 @@ export function Tweet() {
         api
             .getRettweets(id)
             .then((response) => {
-                setRetweets_t(response)
-                console.log("ola", response)
+                setRetweets_t(response.comments)
+                console.log("ola", response.comments)
             })
             .catch((err) => console.error(err))
-        console.log(retweets_t)
 
     }, [])
 

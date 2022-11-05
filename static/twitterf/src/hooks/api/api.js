@@ -64,7 +64,7 @@ export const useApi = () => ({
     },
 
     getRettweets: async (id) => {
-        const response = await api.get(`/tweets/${id}/get_tweet_comments`)
+        const response = await api.get(`/tweets/${id}/banana/`)
         return response.data
     },
 
