@@ -12,7 +12,9 @@ export function RouteApp() {
             <Route element={<Login />} path='/' />
             <Route element={<Home />} path='/home' />
             <Route element={<Tweet />} path='/tweet/:id' />
+            <Route element={<Perfil />} path='/perfil/:id' />
             <Route element={<Perfil />} path='/perfil' />
+
         </Routes>
     )
 }

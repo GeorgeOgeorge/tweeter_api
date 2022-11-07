@@ -80,7 +80,7 @@ export function Tweet() {
                     <div className="col-4" >
                         <div className="posts">
                             <div key={posts.id} className="card-post">
-                                <h5 className="user-post">{posts.tweet_op} <span className="arroba-user">@fulano</span></h5>
+                                <h5 className="user-post"><span className="arroba-user">@fulano</span></h5>
                                 <small>{posts.location}</small>
                                 <div className="card-body p-5">
                                     <p>{posts.text}</p>
@@ -91,7 +91,7 @@ export function Tweet() {
 
                             {(retweets_t) ? retweets_t.map(rtt => {
                                 return (<div key={rtt.id} className="card-post">
-                                    <h5 className="user-post">{rtt.tweet_op} <span className="arroba-user">@fulano</span></h5>
+                                    <h5 className="user-post">{rtt.tweet_op.username} <span className="arroba-user">@fulano</span></h5>
                                     <small>{rtt.location}</small>
                                     <div className="card-body p-5">
                                         <p>{rtt.text}</p>

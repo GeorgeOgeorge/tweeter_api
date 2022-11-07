@@ -22,6 +22,7 @@ export function Home() {
             .getPost()
             .then((response) => {
                 setPosts(response)
+                console.log(response)
             }).catch((err) => {
                 console.error(err)
             })
@@ -63,6 +64,10 @@ export function Home() {
         navigate(`/tweet/${id}`)
     }
 
+    function toProfile(id) {
+        navigate(`/perfil/${id}`)
+    }
+
 
     return (
         <div className="container-fluid home-background">
@@ -87,18 +92,20 @@ export function Home() {
                         </form>
 
                         <div className="posts">
-
-                            {posts.map(post => {
-                                return <div key={post.id} className="card-post" style={{ cursor: 'pointer' }}>
-                                    <h5 onClick={(e) => getRettweets(e, post.id)} className="user-post">{post.tweet_op} <span className="arroba-user">@fulano</span></h5>
-                                    <small>{post.location}</small>
-                                    <div className="card-body p-5">
-                                        <p>{post.text}</p>
+                            {posts.map((post) => {
+                                return (
+                                    <div key={post.id} className="card-post" >
+                                        <h5 className="user-post" onClick={() => toProfile(post.tweet_op.id)} style={{ cursor: 'pointer' }}>{post.tweet_op.username} </h5>
+                                        <small>{post.location}</small>
+                                        <div className="card-body p-5" onClick={(e) => getRettweets(e, post.id)} style={{ cursor: 'pointer' }} >
+                                            <p>{post.text}</p>
+                                        </div>
+                                        <i onClick={(e) => curtePost(e, post.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                        <i onClick={() => setPost_id(post.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
                                     </div>
-                                    <i onClick={(e) => curtePost(e, post.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
-                                    <i onClick={() => setPost_id(post.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
-                                </div>
+                                )
                             })}
+
                         </div>
 
                         {/* <!-- Modal --> */}

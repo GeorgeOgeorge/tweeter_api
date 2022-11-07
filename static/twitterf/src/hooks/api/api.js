@@ -64,7 +64,7 @@ export const useApi = () => ({
     },
 
     getRettweets: async (id) => {
-        const response = await api.get(`/tweets/${id}/banana/`)
+        const response = await api.get(`/tweets/${id}/tweet_replies/`)
         return response.data
     },
 
@@ -76,5 +76,11 @@ export const useApi = () => ({
     getUser: async (id) => {
         const response = await api.get(`/twitterusers/${id}/`)
         return response.data
+    },
+
+    follow: async (data) => {
+        const response = await api.post(`/twitterusers/follow_user/`, data)
+        return response.data
     }
+
 })
