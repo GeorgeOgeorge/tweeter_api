@@ -128,3 +128,11 @@ class TweetViewSet(viewsets.ModelViewSet):
             return Response([TweetSerializer(tweet).data for tweet in tweets], status=status.HTTP_200_OK)
         else:
             return Response({"error": "erro while getting tweets"}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["get"])
+    def user_recomendations(self, request, pk):
+        tweets = TweetService.get_user_recommendations(pk)
+        if tweets:
+            return Response([TweetSerializer(tweet).data for tweet in tweets], status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "erro while getting tweets"}, status=status.HTTP_400_BAD_REQUEST)

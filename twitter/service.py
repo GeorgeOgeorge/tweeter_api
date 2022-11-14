@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.db import connection
 
 from twitter.models import Tweet, TwitterUser
 
@@ -147,6 +148,21 @@ class TweetService():
             return tweets
         else: return Tweet.objects.all().order_by('-created')
 
+    def get_user_recommendations(user_id):
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                select
+                    tt.id as id,
+                    count(ttl.tweet_id) as likes
+                from twitter_tweet_likes ttl
+                right join twitter_tweet tt on ttl.tweet_id = tt.id
+                group by tt.id
+                order by likes desc
+                limit 10;
+            """)
+            tweets = cursor.fetchall()
+
+        return [TweetService.find_tweet_by_id(tweet[0]).first() for tweet in tweets]
 
 def check_result_value(result):
     if len(result) != 0:
