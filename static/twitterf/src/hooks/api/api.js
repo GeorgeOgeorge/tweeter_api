@@ -81,6 +81,11 @@ export const useApi = () => ({
     follow: async (data) => {
         const response = await api.post(`/twitterusers/follow_user/`, data)
         return response.data
+    },
+
+    block: async (data) => {
+        const response = await api.post(`/twitterusers/block_user/`, data)
+        return response.data
     }
 
 })

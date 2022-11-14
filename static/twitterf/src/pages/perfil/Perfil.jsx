@@ -34,8 +34,8 @@ export const Perfil = () => {
         api.follow(data);
     }
 
-    function block() {
-
+    function block(data) {
+        api.block(data)
     }
 
     return (
@@ -82,7 +82,10 @@ export const Perfil = () => {
                                         </button>
                                     )
                                 ) : null}
-                                <button onClick={block}>Bloquear</button>
+                                <button onClick={() => block({
+                                    user_pk: Number.parseInt(userIdLogado),
+                                    follow_pk: user.id,
+                                })}>Bloquear</button>
                             </section>
                         </div>
                     </div>
