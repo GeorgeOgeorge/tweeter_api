@@ -47,7 +47,7 @@ export function Home() {
             .then((response) => console.log(response))
             .catch((err) => console.error(err))
 
-        e.target.style.color = 'red'
+        event.target.style.color = 'red'
     }
 
     function comentaPost(event) {

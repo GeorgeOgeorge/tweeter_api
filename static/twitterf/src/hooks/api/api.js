@@ -34,6 +34,11 @@ export const useApi = () => ({
         return response.data
     },
 
+    editProfile: async (id, data) => {
+        const response = await api.put(`/twitterusers/${id}/`, data)
+        return response.data
+    },
+
     logout: async () => {
         const response = await api.post('/logout/');
     },
