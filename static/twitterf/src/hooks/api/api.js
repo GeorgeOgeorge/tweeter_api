@@ -53,6 +53,11 @@ export const useApi = () => ({
         return response.data
     },
 
+    getPostsUser: async (id) => {
+        const response = await api.get(`/tweets/${id}/get_user_tweets/`)
+        return response.data
+    },
+
     postPost: async ({ text, location, user_id }) => {
         const response = await api.post('/tweets/', { text, location, user_id })
         return response.data

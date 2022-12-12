@@ -134,7 +134,7 @@ export function Home() {
                                             className="form-control input-post" id="exampleFormControlTextarea1" rows={5} placeholder="Say waht you think!" />
                                     </div>
                                     <div class="modal-footer">
-                                        <button onClick={comentaPost} type="button" class="btn btn-primary">Reply</button>
+                                        <button onClick={comentaPost} type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Reply</button>
                                     </div>
                                 </div>
                             </div>

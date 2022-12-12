@@ -16,6 +16,8 @@ export const Perfil = () => {
     const [bio, setBio] = useState('');
     const [email, setEmail] = useState('');
     const [location, setLocation] = useState('');
+    const [posts, setPosts] = useState([])
+
 
     const user_current_id = id
         ? Number.parseInt(id)
@@ -44,7 +46,8 @@ export const Perfil = () => {
         api.block(data)
     }
 
-    function editProfile() {
+    function editProfile(event) {
+        event.preventDefault();
         api.editProfile(user_current_id, {
             username: username,
             password: password,
@@ -58,6 +61,17 @@ export const Perfil = () => {
         })
     }
 
+    useEffect(() => {
+        api
+            .getPostsUser(user_current_id)
+            .then((response) => {
+                setPosts(response)
+                console.log(response)
+            }).catch((err) => {
+                console.error(err)
+            })
+    }, [])
+
     return (
         <div className="container-fluid home-background">
             <div className="container-fluid home-container">
@@ -68,18 +82,18 @@ export const Perfil = () => {
 
                     <div className="col-4">
                         <div className="perfil">
-                            <header id="perfil-header">Nome: {user?.username}</header>
+                            <header id="perfil-header"> <strong>{user?.username}</strong> </header>
                             <section id="perfil-wallpaper"></section>
                             <section id="perfil-photo"></section>
                             <section id="perfil-content">
-                                <p>Bio: {user?.bio}</p>
+                                <p>{user?.bio}</p>
                                 <p>
-                                    Seguidores: {user?.followers.length} &nbsp; Seguindo:{" "}
+                                    Followers: {user?.followers.length} &nbsp; Following:{" "}
                                     {user?.follows.length}
                                 </p>
                                 {user?.id !== Number.parseInt(userIdLogado) ? (
                                     user?.followers.id === Number.parseInt(userIdLogado) ? (
-                                        <button
+                                        <button className="btn btn-info"
                                             onClick={() =>
                                                 follow({
                                                     user_pk: Number.parseInt(userIdLogado),
@@ -90,7 +104,7 @@ export const Perfil = () => {
                                             Deixar de seguir
                                         </button>
                                     ) : (
-                                        <button
+                                        <button className="btn btn-info"
                                             onClick={() =>
                                                 follow({
                                                     user_pk: Number.parseInt(userIdLogado),
@@ -115,45 +129,66 @@ export const Perfil = () => {
                                         })}>Bloquear</button>
                                     )
                                 ) : null}
-                                <button data-bs-toggle="modal" data-bs-target="#exampleModal">Editar Perfil</button>
+                                <button className="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar Perfil</button>
 
                             </section>
                         </div>
+                        <div className="posts">
+                            {posts.map((post) => {
+                                return (
+                                    <div key={post.id} className="card-post" >
+                                        <h5 className="user-post" onClick={() => toProfile(post.tweet_op.id)} style={{ cursor: 'pointer' }}>{post.tweet_op.username} </h5>
+                                        <small> <strong>From</strong>  {post.location}</small>
+                                        <div className="user-tweet" onClick={(e) => getRettweets(e, post.id)} style={{ cursor: 'pointer' }} >
+                                            <p>{post.text}</p>
+                                        </div>
+                                        <i onClick={(e) => curtePost(e, post.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                        <i onClick={() => preComentaPost(post.id, post)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                    </div>
+                                )
+                            })}
+
+                        </div>
                     </div>
                     <div style={{ color: 'black' }} class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <form class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Edite seu perfil</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
-                                    <label htmlFor="username">username</label> <br />
-                                    <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" name="username" id="" />
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">@</span>
+                                    <input required value={username} onChange={(e) => setUsername(e.target.value)} type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div class="modal-body">
-                                    <label htmlFor="username">password</label><br />
-                                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="username" id="" />
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Password</span>
+                                    <input required value={password} onChange={(e) => setPassword(e.target.value)} type="password" class="form-control" placeholder="****" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
-                                <div class="modal-body">
-                                    <label htmlFor="username">bio</label><br />
-                                    <textarea value={bio} onChange={(e) => setBio(e.target.value)} name="" id="" cols="30" rows="5"></textarea>
+
+                                <div class="input-group mb-3">
+                                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" class="form-control" placeholder="Email" aria-label="Recipient's username" aria-describedby="basic-addon2" />
+                                    <span class="input-group-text" id="basic-addon2">@example.com</span>
                                 </div>
-                                <div class="modal-body">
-                                    <label htmlFor="username">email</label><br />
-                                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name="username" id="" />
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Bio</span>
+                                    <textarea value={bio} onChange={(e) => setBio(e.target.value)} class="form-control" aria-label="With textarea"></textarea>
                                 </div>
-                                <div class="modal-body">
-                                    <label htmlFor="username">location</label><br />
-                                    <input value={location} onChange={(e) => setLocation(e.target.value)} type="text" name="username" id="" />
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Location</span>
+                                    <input value={location} onChange={(e) => setLocation(e.target.value)} type="text" class="form-control" aria-label="Amount (to the nearest dollar)" />
+                                    <span class="input-group-text">City - State</span>
                                 </div>
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button onClick={editProfile} type="button" class="btn btn-primary">Editar</button>
+                                    <button type="button" onClick={editProfile} class="btn btn-primary">Editar</button>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <div className="col">
                         <Search />

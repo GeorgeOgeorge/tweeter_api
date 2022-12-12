@@ -23,6 +23,7 @@ export function Tweet() {
             .getOnePost(id)
             .then((response) => {
                 setPosts(response)
+                console.log(response)
             }).catch((err) => {
                 console.error(err)
             })
@@ -53,15 +54,14 @@ export function Tweet() {
         api.
             comentPost(post_id, userId, coment, "natal")
             .then((response) => { })
-            .catch((err) => console.error(err, "asd"))
+            .catch((err) => console.error(err, "error"))
     }
 
     useEffect(() => {
         api
             .getRettweets(id)
             .then((response) => {
-                setRetweets_t(response.comments)
-                console.log("ola", response.comments)
+                setRetweets_t(response.retweets)
             })
             .catch((err) => console.error(err))
 
@@ -80,9 +80,9 @@ export function Tweet() {
                     <div className="col-4" >
                         <div className="posts">
                             <div key={posts.id} className="card-post">
-                                <h5 className="user-post"><span className="arroba-user">@fulano</span></h5>
-                                <small>{posts.location}</small>
-                                <div className="card-body p-5">
+                                <h5 className="user-post">{posts?.tweet_op?.username}</h5>
+                                <small> <strong>From</strong> {posts.location}</small>
+                                <div className="user-tweet">
                                     <p>{posts.text}</p>
                                 </div>
                                 <i onClick={(e) => curtePost(e, posts.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
@@ -91,9 +91,8 @@ export function Tweet() {
 
                             {(retweets_t) ? retweets_t.map(rtt => {
                                 return (<div key={rtt.id} className="card-post">
-                                    <h5 className="user-post">{rtt.tweet_op.username} <span className="arroba-user">@fulano</span></h5>
-                                    <small>{rtt.location}</small>
-                                    <div className="card-body p-5">
+                                    <h5 className="user-post">{rtt.op_name} <span className="arroba-user">@fulano</span></h5>
+                                    <div className="user-tweet">
                                         <p>{rtt.text}</p>
                                     </div>
                                     <i onClick={(e) => curtePost(e, rtt.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
