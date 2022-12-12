@@ -32,33 +32,36 @@ class TwitterUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'id': {'read_only': True},
             'password': {'write_only': True},
-            'tweets':{'read_only': True},
+            'tweets': {'read_only': True},
             'date_joined': {'read_only': True}
         }
 
     def get_tweets(self, obj):
+        tweetValidation = TweetService.find_tweets_by_user_id(obj.id)
         return [
             TweetSerializer(tweet).data
-            for tweet in TweetService.find_tweets_by_user_id(obj.id)
-        ]
+            for tweet in tweetValidation
+        ] if tweetValidation else []
 
     def get_follows(self, obj):
-        follows = TwitterUserService.find_user_by_id(obj.id).get().follows.all()
+        follows = TwitterUserService.find_user_by_id(
+            obj.id).get().follows.all()
         return [
             {
                 "id": user.id,
                 "name": user.username
             } for user in follows
-        ]
+        ] if follows else []
 
     def get_followers(self, obj):
-        followers = TwitterUserService.find_user_by_id(obj.id).get().followers.all()
+        followers = TwitterUserService.find_user_by_id(
+            obj.id).get().followers.all()
         return [
             {
                 "id": user.id,
                 "name": user.username
             } for user in followers
-        ]
+        ] if followers else []
 
     def get_blocks(self, obj):
         blocks = TwitterUserService.find_user_by_id(obj.id).get().blocks.all()
