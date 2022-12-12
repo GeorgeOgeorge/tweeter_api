@@ -93,7 +93,7 @@ export const Perfil = () => {
                                 </p>
                                 {user?.id !== Number.parseInt(userIdLogado) ? (
                                     user?.followers.id === Number.parseInt(userIdLogado) ? (
-                                        <button className="btn btn-info"
+                                        <button style={{ marginRight: "5px" }} className="btn btn-info"
                                             onClick={() =>
                                                 follow({
                                                     user_pk: Number.parseInt(userIdLogado),
@@ -104,7 +104,7 @@ export const Perfil = () => {
                                             Deixar de seguir
                                         </button>
                                     ) : (
-                                        <button className="btn btn-info"
+                                        <button style={{ marginRight: "5px" }} className="btn btn-info"
                                             onClick={() =>
                                                 follow({
                                                     user_pk: Number.parseInt(userIdLogado),
@@ -118,18 +118,18 @@ export const Perfil = () => {
                                 ) : null}
                                 {user?.id !== Number.parseInt(userIdLogado) ? (
                                     user?.blocks.id === Number.parseInt(userIdLogado) ? (
-                                        <button onClick={() => block({
+                                        <button className="btn btn-info" onClick={() => block({
                                             user_pk: Number.parseInt(userIdLogado),
                                             follow_pk: user.id,
                                         })}>Desbloquear</button>
                                     ) : (
-                                        <button onClick={() => block({
+                                        <button className="btn btn-info" onClick={() => block({
                                             user_pk: Number.parseInt(userIdLogado),
                                             follow_pk: user.id,
                                         })}>Bloquear</button>
                                     )
-                                ) : null}
-                                <button className="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar Perfil</button>
+                                ) : <button className="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar Perfil</button>
+                                }
 
                             </section>
                         </div>
