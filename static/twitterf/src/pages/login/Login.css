@@ -1,7 +1,7 @@
 .login-background {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(248, 248, 248);
 
-  color: aliceblue;
+  color: rgb(0, 0, 0);
 }
 
 .login {
@@ -9,7 +9,7 @@
 }
 
 .bg-image {
-  background-image: url('https://source.unsplash.com/WEQbe2jBg40/600x1200');
+  background-image: url('https://images8.alphacoders.com/473/473471.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -22,4 +22,8 @@
   font-size: 0.9rem;
   letter-spacing: 0.05rem;
   padding: 0.75rem 1rem;
+}
+
+.small {
+  color: black;
 }

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/api/api";
 import './login.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function Login() {
     const api = useApi()
@@ -30,11 +32,14 @@ export function Login() {
 
     return (
         <div className="login-background container-fluid ps-md-0 ">
+            <ToastContainer />
             <div className="row g-0">
                 <div className="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
                 <div className="col-md-8 col-lg-6">
                     <div className="login d-flex align-items-center py-5">
                         <div className="container">
+
+
                             <div className="row">
                                 <div className="col-md-9 col-lg-8 mx-auto">
                                     <h3 className="login-heading mb-4">Welcome back!</h3>
@@ -42,25 +47,18 @@ export function Login() {
 
                                     <form onSubmit={(e) => handloLogin(e)}>
                                         <div className="form-floating mb-3">
-                                            <input value={username} onChange={(e) => setUserName(e.target.value)} type="text" className="form-control" id="floatingInput" placeholder="name@example.com"/>
-                                                <label htmlFor="floatingInput">Email address</label>
+                                            <input value={username} onChange={(e) => setUserName(e.target.value)} type="text" className="form-control" id="floatingInput" placeholder="name@example.com" />
+                                            <label style={{ color: "gray" }} htmlFor="floatingInput">username</label>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
-                                                <label htmlFor="floatingPassword">Password</label>
-                                        </div>
-
-                                        <div className="form-check mb-3">
-                                            <input className="form-check-input" type="checkbox" value="" id="rememberPasswordCheck" />
-                                            <label className="form-check-label" htmlFor="rememberPasswordCheck">
-                                                Remember password
-                                            </label>
+                                            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="floatingPassword" placeholder="Password" />
+                                            <label style={{ color: "gray" }} htmlFor="floatingPassword">password</label>
                                         </div>
 
                                         <div className="d-grid">
                                             <button className="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Sign in</button>
                                             <div className="text-center">
-                                                <a className="small" onClick={navigateToRegister} href="#">Fazer cadastro?</a>
+                                                <a className="small" onClick={navigateToRegister} href="#">Sign up</a>
                                             </div>
                                         </div>
 

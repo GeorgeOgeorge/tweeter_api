@@ -5,6 +5,8 @@ import { Search } from "../../components/search/Search";
 import { Trending } from "../../components/Trending/Trending";
 import { useApi } from "../../hooks/api/api";
 import './home.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function Home() {
     const api = useApi()
@@ -15,7 +17,7 @@ export function Home() {
     const [post, setPost] = useState()
     const [post_id, setPost_id] = useState()
     const [coment, setComent] = useState()
-    const [retweets_t, setRetweets_t] = useState([])
+    const [postComent, setPostComent] = useState()
 
     useEffect(() => {
         api
@@ -59,6 +61,11 @@ export function Home() {
             .catch((err) => console.error(err))
     }
 
+    function preComentaPost(id, post) {
+        setPost_id(id);
+        setPostComent(post)
+    }
+
     function getRettweets(e, id) {
         e.preventDefault()
         navigate(`/tweet/${id}`)
@@ -71,6 +78,8 @@ export function Home() {
 
     return (
         <div className="container-fluid home-background">
+            <ToastContainer />
+
             <div className="container-fluid home-container">
                 <div className="row">
                     <div className="col coluna-1">
@@ -96,12 +105,12 @@ export function Home() {
                                 return (
                                     <div key={post.id} className="card-post" >
                                         <h5 className="user-post" onClick={() => toProfile(post.tweet_op.id)} style={{ cursor: 'pointer' }}>{post.tweet_op.username} </h5>
-                                        <small>{post.location}</small>
-                                        <div className="card-body p-5" onClick={(e) => getRettweets(e, post.id)} style={{ cursor: 'pointer' }} >
+                                        <small> <strong>From</strong>  {post.location}</small>
+                                        <div className="user-tweet" onClick={(e) => getRettweets(e, post.id)} style={{ cursor: 'pointer' }} >
                                             <p>{post.text}</p>
                                         </div>
                                         <i onClick={(e) => curtePost(e, post.id)} class="fa-solid fa-heart like-heart" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
-                                        <i onClick={() => setPost_id(post.id)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
+                                        <i onClick={() => preComentaPost(post.id, post)} data-bs-toggle="modal" data-bs-target="#exampleModal" class="fa-regular fa-comment" style={{ cursor: 'pointer', marginRight: '20px' }}></i>
                                     </div>
                                 )
                             })}
@@ -113,16 +122,19 @@ export function Home() {
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Coment algo</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
+                                    <div className="post-respost">
+                                        <h5> <strong>reply</strong> {postComent?.tweet_op.username}</h5>
+                                        <p>{postComent?.text}</p>
+                                    </div>
+
                                     <div class="modal-body">
                                         <textarea value={coment} onChange={(e) => setComent(e.target.value)}
-                                            className="form-control input-post" id="exampleFormControlTextarea1" rows={5} placeholder="O que há de novo?" />
+                                            className="form-control input-post" id="exampleFormControlTextarea1" rows={5} placeholder="Say waht you think!" />
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button onClick={comentaPost} type="button" class="btn btn-primary">Comentar</button>
+                                        <button onClick={comentaPost} type="button" class="btn btn-primary">Reply</button>
                                     </div>
                                 </div>
                             </div>

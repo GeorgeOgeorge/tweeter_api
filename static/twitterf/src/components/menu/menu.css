@@ -1,4 +1,7 @@
+
 .menu {
+    position: fixed;
+
     display: flex;
     justify-content: start;
     align-items: flex-start;
@@ -10,7 +13,7 @@
 .menu ol, a {
     list-style-type: none;
     text-decoration: none;
-    color: aliceblue;
+    color: rgb(0, 174, 255);
 }
 
 .menu ol li {

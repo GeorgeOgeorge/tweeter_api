@@ -13,7 +13,7 @@ export const Menu = () => {
     }
 
     const exit = () => {
-        navigate('/login')
+        navigate('/')
     }
 
     return (

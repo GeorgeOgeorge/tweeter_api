@@ -30,7 +30,7 @@ export const useApi = () => ({
     },
 
     signup: async (username, password, email) => {
-        const response = await api.post('/twitterusers/', { username, password, email, bio: '', location: '', website: '', phone: '', birth_date: null })
+        const response = await api.post('/twitterusers/', { username, password, email, bio: '', location: '', website: '', phone: '', birth_date: '2020-01-01' })
         return response.data
     },
 

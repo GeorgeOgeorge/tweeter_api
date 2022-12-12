@@ -1,4 +1,8 @@
 .trending {
+    position: fixed;
+    top: 80px;
+}
+.trending {
     background-color: rgba(56, 55, 55, 0.377);
     color: aliceblue;
     padding: 15px;
